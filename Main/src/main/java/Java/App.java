@@ -1,4 +1,4 @@
-package Java.Service;
+package Java;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
