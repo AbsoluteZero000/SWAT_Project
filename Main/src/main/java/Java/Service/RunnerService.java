@@ -22,8 +22,8 @@ public class RunnerService{
         query.setParameter(1, id);
         Order order = query.getSingleResult();
         order.setOrderStatus(OrderStatus.DELIVERED);
-        Runner runner = order.GetRunner();
-        runner.SetStatus(Status.AVAILABLE);
+        Runner runner = order.getRunner();
+        runner.setStatus(Status.AVAILABLE);
         em.merge(order);
     }
 

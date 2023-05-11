@@ -35,19 +35,19 @@ public class Runner {
         return status;
     }
 
-    public int GetDeliveryFees(){
+    public int getDeliveryFees(){
         return deliveryFees;
     }
 
-    public void SetName(String name){
+    public void setName(String name){
         this.name = name;
     }
 
-    public void SetStatus(Status status){
+    public void setStatus(Status status){
         this.status = status;
     }
 
-    public void SetDeliveryFees(int deliveryFees){
+    public void setDeliveryFees(int deliveryFees){
         this.deliveryFees = deliveryFees;
     }
 

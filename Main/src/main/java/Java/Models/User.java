@@ -16,24 +16,24 @@ public class User {
     private String role;
 
 
-    public int GetId(){
+    public int getId(){
         return id;
     }
 
-    public String GetName(){
+    public String getName(){
         return name;
     }
 
-    public String GetRole(){
+    public String getRole(){
         return role;
     }
 
 
-    public void SetName(String name){
+    public void setName(String name){
         this.name = name;
     }
 
-    public void SetRole(String role){
+    public void setRole(String role){
         this.role = role;
     }
 }

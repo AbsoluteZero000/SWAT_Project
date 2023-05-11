@@ -18,11 +18,11 @@ public class Meal{
     @JoinColumn(name = "fk_restaurantId")
     private Restaurant restaurant;
 
-    public int GetId(){
+    public int getId(){
         return id;
     }
 
-    public String GetName(){
+    public String getName(){
         return name;
     }
 

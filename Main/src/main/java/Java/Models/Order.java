@@ -32,34 +32,34 @@ public class Order {
 
     private OrderStatus orderStatus;
 
-    public int GetId(){
+    public int getId(){
         return id;
     }
 
-    public ArrayList<Meal> GetItemsArray(){
+    public ArrayList<Meal> getItemsArray(){
         return itemsArray;
     }
 
-    public int GetTotalPrice(){
+    public int getTotalPrice(){
         return totalPrice;
     }
 
-    public Runner GetRunner(){
+    public Runner getRunner(){
         return runner;
     }
 
-    public OrderStatus GetOrderStatus(){
+    public OrderStatus getOrderStatus(){
         return orderStatus;
     }
 
-    public void AddItemsToArray(Meal meal){
+    public void addItemsToArray(Meal meal){
         itemsArray.add(meal);
     }
 
-    public void SetRunner(Runner runner){
+    public void setRunner(Runner runner){
         this.runner = runner;
     }
-    public void SetTotalPrice(int price){
+    public void setTotalPrice(int price){
         this.totalPrice = price;
     }
 

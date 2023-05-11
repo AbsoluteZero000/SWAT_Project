@@ -35,6 +35,10 @@ public class Restaurant{
         return meals;
     }
 
+    public ArrayList<Order> getOrders(){
+        return orders;
+    }
+
     public void setId(int id){
         this.id = id;
     }
@@ -49,6 +53,10 @@ public class Restaurant{
 
     public void setMeals(ArrayList<Meal> meals){
         this.meals = meals;
+    }
+
+    public void setOrders(ArrayList<Order> orders){
+        this.orders = orders;
     }
 
 }

@@ -20,26 +20,29 @@ public class CustomerService {
 
     public CustomerService(){}
 
-    public void CreateOrder(Order order){
+    public void createOrder(Order order) throws UnImplementedFunctionException{
         TypedQuery<Runner> query = em.createQuery("Select r from Runner r where r.status = Status.AVAILABLE", Runner.class);
         query.setMaxResults(1);
         Runner runner = query.getSingleResult();
-        runner.SetStatus(Status.BUSY);
-        order.SetRunner(runner);
+        runner.setStatus(Status.BUSY);
+        order.setRunner(runner);
         em.merge(runner);
         em.persist(order);
+
+        throw new UnImplementedFunctionException();
     }
-    public void EditOrder(Order order) throws OrderCanceledException{
+
+    public void editOrder(Order order) throws OrderCanceledException{
         TypedQuery<Order> query = em.createQuery("Select o from Order o where o.orderStatus <> OrderStatus.CANCELED", Order.class);
         Order tempOrder = query.getSingleResult();
 
-        if(tempOrder.GetOrderStatus() == OrderStatus.CANCELED)
+        if(tempOrder.getOrderStatus() == OrderStatus.CANCELED)
             throw new OrderCanceledException();
 
         em.merge(order);
     }
 
-    public ArrayList<Restaurant> GetAllRestaurants(){
+    public ArrayList<Restaurant> getAllRestaurants(){
 
         TypedQuery<Restaurant> query = em.createQuery("select r from Resturant r", Restaurant.class);
         return (ArrayList<Restaurant>) query.getResultList();
