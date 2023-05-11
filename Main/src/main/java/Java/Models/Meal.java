@@ -1,4 +1,5 @@
 package Java.Models;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -6,10 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.*;
 
 @Entity
-public class Meal{
+public class Meal {
     // id, name , price, fk_restaurantId
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private double price;
@@ -18,27 +19,27 @@ public class Meal{
     @JoinColumn(name = "fk_restaurantId")
     private Restaurant restaurant;
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
-    public void setPrice(double price){
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public double getPrice(){
+    public double getPrice() {
         return this.price;
     }
 }

@@ -1,6 +1,6 @@
 package Java.Models;
 
-import Java.Util.Status;
+import Java.Util.Enums.Status;
 import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,11 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
 import javax.persistence.Id;
 
-
 @Entity
 public class Runner {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -23,31 +22,32 @@ public class Runner {
 
     @OneToMany(mappedBy = "runner")
     private ArrayList<Order> orders;
-    public int GetId(){
+
+    public int getId() {
         return id;
     }
 
-    public String GetName(){
+    public String getName() {
         return name;
     }
 
-    public Status GetStatus(){
+    public Status getStatus() {
         return status;
     }
 
-    public int getDeliveryFees(){
+    public int getDeliveryFees() {
         return deliveryFees;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setStatus(Status status){
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public void setDeliveryFees(int deliveryFees){
+    public void setDeliveryFees(int deliveryFees) {
         this.deliveryFees = deliveryFees;
     }
 

@@ -1,9 +1,9 @@
-package Java.Models;
+package Java.Util;
 
 import java.util.ArrayList;
-
 import javax.ejb.Stateless;
-import Java.Util.Enums.OrderStatus;
+import Java.Models.*;
+import Java.Util.Enums.*;
 
 @Stateless
 public class RestaurantReport {
