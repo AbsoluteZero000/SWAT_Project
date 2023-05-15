@@ -10,6 +10,8 @@ public class AuthenticationService {
     @PersistenceContext
     private EntityManager em;
 
+    private User currentUser;
+
     public User login(String name, String password) throws WrongCredentialsException{
 
         TypedQuery<User> query = em.createQuery(

@@ -9,7 +9,7 @@ import javax.validation.constraints.Past;
 
 import app.Models.*;
 import app.Models.Restaurant;
-import app.Models.RestaurantReport;
+import app.Util.RestaurantReport;
 import app.Service.*;
 import app.Util.OrderDetails;
 
@@ -46,7 +46,7 @@ public class ApplicationApi {
     @Path("editRestaurantMenu")
     public void editRestaurantMenu(ArrayList<Object> Args) {
         Restaurant tempRestaurant = new Restaurant();
-        tempRestaurant.setMeals((ArrayList<Meal>) Args.get(1));
+        tempRestaurant.setMeals((Set<Meal>) Args.get(1));
         tempRestaurant.setId((int) Args.get(0));
         try{
         ownerService.editRestaurantMenu(tempRestaurant);
@@ -88,7 +88,6 @@ public class ApplicationApi {
 
     @GET
     @Path("getAllRest")
-    @RolesAllowed("Customer")
     public ArrayList<Restaurant> getAllRestaurants() {
         return customerService.getAllRestaurants();
     }

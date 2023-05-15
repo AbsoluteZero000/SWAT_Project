@@ -1,6 +1,8 @@
 package app.Models;
 
 import java.util.ArrayList;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,10 +26,10 @@ public class Restaurant {
     private User owner;
 
     @OneToMany(mappedBy = "restaurant")
-    private ArrayList<Order> orders;
+    private Set<Order> orders;
 
     @OneToMany(mappedBy = "restaurant")
-    private ArrayList<Meal> meals;
+    private Set<Meal> meals;
 
     public int GetId() {
         return id;
@@ -41,11 +43,11 @@ public class Restaurant {
         return owner;
     }
 
-    public ArrayList<Meal> getMeals() {
+    public Set<Meal> getMeals() {
         return meals;
     }
 
-    public ArrayList<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
@@ -61,11 +63,11 @@ public class Restaurant {
         this.name = name;
     }
 
-    public void setMeals(ArrayList<Meal> meals) {
+    public void setMeals(Set<Meal> meals) {
         this.meals = meals;
     }
 
-    public void setOrders(ArrayList<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 

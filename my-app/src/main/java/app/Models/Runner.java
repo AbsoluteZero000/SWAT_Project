@@ -1,7 +1,8 @@
 package app.Models;
 
 import app.Util.Enums.Status;
-import java.util.ArrayList;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,7 @@ public class Runner {
     private int deliveryFees;
 
     @OneToMany(mappedBy = "runner")
-    private ArrayList<Order> orders;
+    private Set<Order> orders;
 
     public int getId() {
         return id;

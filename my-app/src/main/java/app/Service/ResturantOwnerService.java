@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import app.Models.Restaurant;
-import app.Models.RestaurantReport;
+import app.Util.RestaurantReport;
 
 @RolesAllowed("RestaurantOwner")
 @Stateless
