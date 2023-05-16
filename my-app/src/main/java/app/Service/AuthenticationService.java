@@ -1,5 +1,7 @@
 package app.Service;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,7 +14,8 @@ public class AuthenticationService {
     @PersistenceContext
     private EntityManager em;
 
-    private User currentUser;
+    @Resource
+    EJBContext context;
 
     public User login(String name, String password) throws WrongCredentialsException{
 
