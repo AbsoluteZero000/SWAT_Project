@@ -1,11 +1,13 @@
 package app.Service;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import app.Models.User;
 import app.Util.Exceptions.WrongCredentialsException;
 
+@Stateless
 public class AuthenticationService {
     @PersistenceContext
     private EntityManager em;
