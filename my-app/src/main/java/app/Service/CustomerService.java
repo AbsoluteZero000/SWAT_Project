@@ -19,8 +19,7 @@ public class CustomerService {
     @PersistenceContext
     private EntityManager em;
 
-    public CustomerService() {
-    }
+    public CustomerService(){}
 
     public OrderDetails createOrder(Order order) {
         TypedQuery<Runner> query = em.createQuery(

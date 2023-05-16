@@ -1,6 +1,5 @@
 package app.Models;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -31,6 +30,12 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private Set<Meal> meals;
 
+    public Restaurant(){}
+
+    public Restaurant(String name, User owner){
+        this.name = name;
+        this.owner = owner;
+    }
     public int GetId() {
         return id;
     }

@@ -13,16 +13,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    
     private String email;
-
     private String password;
-
     private String name;
+    private String role;
+
     @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    private String role;
 
+    public User(String email, String password, String name, String role){
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+    }
     public int getId() {
         return id;
     }

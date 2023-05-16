@@ -24,6 +24,13 @@ public class Runner {
     @OneToMany(mappedBy = "runner")
     private Set<Order> orders;
 
+    public Runner(){}
+
+    public Runner(String name, int deliveryFees){
+        this.name = name;
+        this.status = Status.AVAILABLE;
+        this.deliveryFees = deliveryFees;
+    }
     public int getId() {
         return id;
     }

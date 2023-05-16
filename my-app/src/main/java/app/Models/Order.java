@@ -31,6 +31,8 @@ public class Order {
 
     private OrderStatus orderStatus;
 
+    public Order(){}
+
     private double calculateTotalPrice() {
         double sum = 0;
         for (int i = 0; i < itemsArray.size(); i++) {

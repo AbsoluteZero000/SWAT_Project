@@ -1,19 +1,14 @@
 package app.Rest;
 
 import java.util.*;
-
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
-import javax.validation.constraints.Past;
-
 import app.Models.*;
 import app.Models.Restaurant;
 import app.Util.RestaurantReport;
 import app.Service.*;
 import app.Util.OrderDetails;
-
+import java.util.ArrayList;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -22,18 +17,19 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
 public class ApplicationApi {
-    @Inject
-    CustomerService customerService;
-    @Inject
-    RunnerService runnerService;
-    @Inject
-    ResturantOwnerService ownerService;
 
+    @Inject
+    CustomerService customerService = new CustomerService();
+    @Inject
+    RunnerService runnerService = new RunnerService();
+    @Inject
+    ResturantOwnerService ownerService = new ResturantOwnerService();
+    @Inject
+    UserService userService = new UserService();
 
 
     @POST
     @Path("createRestaurant")
-    @RolesAllowed("RestaurantOwner")
     public void createMenu(Restaurant restaurant) {
         try {
             ownerService.createRestaurantMenu(restaurant);
@@ -43,7 +39,6 @@ public class ApplicationApi {
     }
 
     @PUT
-    @RolesAllowed("RestaurantOwner")
     @Path("editRestaurantMenu")
     public void editRestaurantMenu(ArrayList<Object> Args) {
         Restaurant tempRestaurant = new Restaurant();
@@ -56,30 +51,34 @@ public class ApplicationApi {
         }
     }
 
+    @POST
+    @Path("addUser")
+    public User addUser(String email, String password, String name, String role){
+        User user = new User(email, password, name, role);
+        userService.addUser(user);
+        return user;
+    }
     @GET
-    @RolesAllowed("RestaurantOwner")
     @Path("getRestaurantDetails")
     public Restaurant getRestaurantDetails(int id) {
         return ownerService.getRestaurantDetails(id);
     }
 
     @GET
-    @RolesAllowed("RestaurantOwner")
     @Path("getRestaurantReport")
     public RestaurantReport getRestaurantReport(int id) {
         Restaurant restaurant = this.getRestaurantDetails(id);
         return ownerService.getRestaurantReport(restaurant);
     }
 
-    @Past
-    @RolesAllowed("Customer")
+    @POST
     @Path("createOrder")
     public OrderDetails createOrder(Order order) {
         return customerService.createOrder(order);
     }
 
+
     @PUT
-    @RolesAllowed("Customer")
     @Path("editOrder")
     public void editOrder(ArrayList<Object> Args) {
         Order order = new Order();
@@ -89,14 +88,12 @@ public class ApplicationApi {
 
     @GET
     @Path("getAllRest")
-    @PermitAll
     public ArrayList<Restaurant> getAllRestaurants() {
         return customerService.getAllRestaurants();
     }
 
     @POST
     @Path("markOrder")
-    @RolesAllowed("Runner")
     public void markOrder(int id) {
         try {
             runnerService.markOrder(id);
@@ -105,9 +102,22 @@ public class ApplicationApi {
         }
     }
 
+    @POST
+    @Path("AddRunner")
+    public void addRunner(Runner runner){
+        System.out.println("I'm HERE");
+
+        runnerService.addRunner(runner);
+    }
+
     @GET
-    @Path("NoOfTrips")
-    @RolesAllowed("Runner")
+    @Path("Test")
+    public String test(){
+        return runnerService.test();
+    }
+
+    @GET
+    @Path("NoOfTrips/{id}")
     public int getNumberOfTrips(int id) {
         return runnerService.getNumberOfTrips(id);
     }

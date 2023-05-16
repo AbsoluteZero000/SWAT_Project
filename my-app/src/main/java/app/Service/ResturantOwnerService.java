@@ -15,6 +15,7 @@ public class ResturantOwnerService {
     @PersistenceContext
     private EntityManager em;
 
+    public ResturantOwnerService(){}
     public void createRestaurantMenu(Restaurant restaurant) {
         em.persist(restaurant);
     }

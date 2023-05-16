@@ -14,10 +14,16 @@ public class Meal {
     private int id;
     private String name;
     private double price;
-    // private int fk_restaurantId;
     @ManyToOne
     @JoinColumn(name = "fk_restaurantId")
     private Restaurant restaurant;
+
+    public Meal(){}
+
+    public Meal(String name, double price){
+        this.name = name;
+        this.price = price;
+    }
 
     public int getId() {
         return id;
