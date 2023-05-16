@@ -1,4 +1,5 @@
 EJBContext
 httpservletRequest
-loginlogout
+login
+logout
 authenticate
