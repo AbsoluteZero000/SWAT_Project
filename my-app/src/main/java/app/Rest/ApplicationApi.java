@@ -2,6 +2,7 @@ package app.Rest;
 
 import java.util.*;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -88,6 +89,7 @@ public class ApplicationApi {
 
     @GET
     @Path("getAllRest")
+    @PermitAll
     public ArrayList<Restaurant> getAllRestaurants() {
         return customerService.getAllRestaurants();
     }
