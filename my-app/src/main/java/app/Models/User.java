@@ -7,15 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import app.Util.Communication_Classes.UserComm;
+
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    
     private String email;
-    private String password;
     private String name;
     private String role;
 
@@ -23,9 +22,13 @@ public class User {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    public User(String email, String password, String name, String role){
+    public User(UserComm userComm){
+        this.email = userComm.email;
+        this.name  = userComm.name;
+        this.role = userComm.role;
+    }
+    public User(String email, String name, String role){
         this.email = email;
-        this.password = password;
         this.name = name;
         this.role = role;
     }
@@ -37,9 +40,6 @@ public class User {
         return email;
     }
 
-    public Boolean checkPassword(String password){
-        return this.password.equals(password);
-    }
 
     public String getName() {
         return name;
@@ -61,7 +61,5 @@ public class User {
         this.email = email;
     }
 
-    public void setPassword(String password){
-        this.password = password;
-    }
+
 }

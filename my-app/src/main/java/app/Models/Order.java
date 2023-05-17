@@ -31,7 +31,9 @@ public class Order {
 
     private OrderStatus orderStatus;
 
-    public Order(){}
+    public Order(){
+        orderStatus = OrderStatus.PREPARING;
+    }
 
     private double calculateTotalPrice() {
         double sum = 0;

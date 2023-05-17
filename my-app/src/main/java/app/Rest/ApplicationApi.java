@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import app.Models.*;
 import app.Models.Restaurant;
 import app.Util.RestaurantReport;
+import app.Util.Communication_Classes.UserComm;
 import app.Service.*;
 import app.Util.OrderDetails;
 import java.util.ArrayList;
@@ -53,8 +54,8 @@ public class ApplicationApi {
 
     @POST
     @Path("addUser")
-    public User addUser(String email, String password, String name, String role){
-        User user = new User(email, password, name, role);
+    public User addUser(UserComm userComm){
+        User user = new User(userComm);
         userService.addUser(user);
         return user;
     }
