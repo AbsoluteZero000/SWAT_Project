@@ -54,7 +54,7 @@ public class ApplicationApi {
 
     @POST
     @Path("addUser")
-    public User addUser(UserComm userComm){
+    public User addUser(Object user){
         User user = new User(userComm);
         userService.addUser(user);
         return user;
