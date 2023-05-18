@@ -1,5 +1,6 @@
 package app.Models;
 
+import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.Status;
 import java.util.Set;
 
@@ -24,7 +25,10 @@ public class Runner {
     @OneToMany(mappedBy = "runner")
     private Set<Order> orders;
 
-    public Runner(){}
+    public Runner(RunnerComm runnerComm){
+        name = runnerComm.name;
+        deliveryFees = runnerComm.deliveryFees;
+    }
 
     public Runner(String name, int deliveryFees){
         this.name = name;

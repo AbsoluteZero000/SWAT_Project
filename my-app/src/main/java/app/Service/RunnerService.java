@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 import app.Models.*;
+import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
 
@@ -17,7 +18,7 @@ public class RunnerService {
     @PersistenceContext
     private EntityManager em;
 
-    public RunnerService(){}
+
 
     public void markOrder(int id) {
         TypedQuery<Order> query = em.createQuery("Select o from Order o where o.id =? 1", Order.class);
@@ -34,7 +35,8 @@ public class RunnerService {
         em.merge(runner);
     }
 
-    public void addRunner(Runner runner){
+    public void addRunner(RunnerComm runnerComm){
+        Runner runner = new Runner(runnerComm);
         em.persist(runner);
     }
 

@@ -35,6 +35,7 @@ public class Order {
         orderStatus = OrderStatus.PREPARING;
     }
 
+
     private double calculateTotalPrice() {
         double sum = 0;
         for (int i = 0; i < itemsArray.size(); i++) {

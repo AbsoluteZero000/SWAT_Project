@@ -21,25 +21,34 @@ public class CustomerService {
 
     public CustomerService(){}
 
-    public OrderDetails createOrder(Order order) {
+    public OrderDetails createOrder(Order order, int resturantId) {
+        TypedQuery<Restaurant> query2 = em.createQuery(
+            "Select r from Restaurant r where r.id =?1",
+                Restaurant.class);
+        query2.setParameter(1, resturantId);
+        Restaurant restaurant = query2.getSingleResult();
+        order.setRestaurant(restaurant);
+
         TypedQuery<Runner> query = em.createQuery(
-                "Select r from Runner r where r.status = Status.AVAILABLE",
+            "Select r from Runner r where r.status = Status.AVAILABLE",
                 Runner.class);
         query.setMaxResults(1);
         Runner runner = query.getSingleResult();
         runner.setStatus(Status.BUSY);
         order.setRunner(runner);
+
         em.merge(runner);
         order.setRunner(runner);
+
         em.persist(order);
         return new OrderDetails(order);
     }
 
-    public void editOrder(Order order) throws OrderCanceledException, NullPointerException {
+    public void editOrder(int id, ArrayList<Meal> meals) throws OrderCanceledException, NullPointerException {
         TypedQuery<Order> query = em.createQuery(
                 "Select o from Order o where o.id =?1",
                 Order.class);
-        query.setParameter(1, order.getId());
+        query.setParameter(1, id);
         Order tempOrder = query.getSingleResult();
 
         if (tempOrder == null)
@@ -48,7 +57,7 @@ public class CustomerService {
         if (tempOrder.getOrderStatus() == OrderStatus.CANCELED)
             throw new OrderCanceledException();
 
-        tempOrder.setMealList(order.getMealsList());
+        tempOrder.setMealList(meals);
         em.merge(tempOrder);
     }
 
@@ -56,6 +65,14 @@ public class CustomerService {
 
         TypedQuery<Restaurant> query = em.createQuery("select r from Resturant r", Restaurant.class);
         return (ArrayList<Restaurant>) query.getResultList();
+    }
+
+    public Order getOrder(int id){
+        TypedQuery<Order> query = em.createQuery(
+                "Select o from Order o where o.id =?1",
+                Order.class);
+        query.setParameter(1, id);
+        return query.getSingleResult();
     }
 
 }

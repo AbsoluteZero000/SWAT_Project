@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import app.Models.Restaurant;
+import app.Models.User;
 import app.Util.RestaurantReport;
 
 @RolesAllowed("RestaurantOwner")
@@ -38,7 +39,11 @@ public class ResturantOwnerService {
         query.setParameter(1, id);
         return query.getSingleResult();
     }
-
+    public Restaurant addRestaurant(String name, User owner){
+        Restaurant restaurant = new Restaurant(name, owner);
+        em.persist(restaurant);
+        return restaurant;
+    }
     public RestaurantReport getRestaurantReport(Restaurant restaurant) {
         return new RestaurantReport(restaurant);
     }

@@ -4,8 +4,8 @@ import java.util.*;
 import javax.ejb.*;
 import javax.inject.Inject;
 import app.Models.*;
-import app.Models.Restaurant;
 import app.Util.RestaurantReport;
+import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Communication_Classes.UserComm;
 import app.Service.*;
 import app.Util.OrderDetails;
@@ -41,12 +41,12 @@ public class ApplicationApi {
 
     @PUT
     @Path("editRestaurantMenu")
-    public void editRestaurantMenu(ArrayList<Object> Args) {
-        Restaurant tempRestaurant = new Restaurant();
-        tempRestaurant.setMeals((Set<Meal>) Args.get(1));
-        tempRestaurant.setId((int) Args.get(0));
+    public void editRestaurantMenu(int id, Set<Meal> meals) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setMeals(meals);
+        restaurant.setId(id);
         try{
-        ownerService.editRestaurantMenu(tempRestaurant);
+        ownerService.editRestaurantMenu(restaurant);
         } catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -54,7 +54,7 @@ public class ApplicationApi {
 
     @POST
     @Path("addUser")
-    public User addUser(Object user){
+    public User addUser(UserComm userComm){
         User user = new User(userComm);
         userService.addUser(user);
         return user;
@@ -62,7 +62,8 @@ public class ApplicationApi {
     @GET
     @Path("getRestaurantDetails")
     public Restaurant getRestaurantDetails(int id) {
-        return ownerService.getRestaurantDetails(id);
+        return new Restaurant("name of the restaurant", new User("email", "name", "role"));
+        //return ownerService.getRestaurantDetails(id);
     }
 
     @GET
@@ -74,17 +75,25 @@ public class ApplicationApi {
 
     @POST
     @Path("createOrder")
-    public OrderDetails createOrder(Order order) {
-        return customerService.createOrder(order);
+    public OrderDetails createOrder(ArrayList<Meal> meals, int resturantId ) {
+
+        Order order = new Order();
+        order.setMealList(meals);
+        return customerService.createOrder(order, resturantId);
     }
 
 
     @PUT
     @Path("editOrder")
-    public void editOrder(ArrayList<Object> Args) {
-        Order order = new Order();
-        order.setId((int) Args.get(0));
-        order.setMealList((ArrayList<Meal>) Args.get(1));
+    public Order editOrder(int id, ArrayList<Meal> meals){
+        try{
+        customerService.editOrder(id, meals);
+        return customerService.getOrder(id);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return new Order();
     }
 
     @GET
@@ -105,9 +114,7 @@ public class ApplicationApi {
 
     @POST
     @Path("AddRunner")
-    public void addRunner(Runner runner){
-        System.out.println("I'm HERE");
-
+    public void addRunner(RunnerComm runner){
         runnerService.addRunner(runner);
     }
 
