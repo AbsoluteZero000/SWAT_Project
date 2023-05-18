@@ -9,13 +9,10 @@ import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
 
-
 @Stateless
 public class RunnerService {
     @PersistenceContext
     private EntityManager em;
-
-
 
     public void markOrder(int id) {
         TypedQuery<Orders> query = em.createQuery("Select o from Order o where o.id =? 1", Orders.class);
@@ -32,21 +29,22 @@ public class RunnerService {
         em.merge(runner);
     }
 
-    public Runner addRunner(RunnerComm runnerComm){
+    public Runner addRunner(RunnerComm runnerComm) {
         Runner runner = new Runner(runnerComm);
         em.persist(runner);
         return runner;
     }
 
-    public String test(){
+    public String test() {
         return "Runner Service";
     }
     // public int getNumberOfTrips(int id) {
-    //     TypedQuery<Order> query = em.createQuery(
-    //             "SELECT o FROM Order o JOIN o.runner r WHERE o.id = r.id and o.runner_id =? 1 and o.OrderStatus = OrderStatus.DELIVERED",
-    //             Order.class);
-    //     query.setParameter(1, id);
-    //     List<Order> list = query.getResultList();
-    //     return list.size();
+    // TypedQuery<Order> query = em.createQuery(
+    // "SELECT o FROM Order o JOIN o.runner r WHERE o.id = r.id and o.runner_id =? 1
+    // and o.OrderStatus = OrderStatus.DELIVERED",
+    // Order.class);
+    // query.setParameter(1, id);
+    // List<Order> list = query.getResultList();
+    // return list.size();
     // }
 }

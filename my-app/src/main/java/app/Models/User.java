@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import app.Util.Communication_Classes.UserComm;
 
 @Entity
-public class User implements Serializable{
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,12 +24,11 @@ public class User implements Serializable{
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-
-    public User(UserComm userComm){
-        this.name  = userComm.name;
+    public User(UserComm userComm) {
+        this.name = userComm.name;
     }
 
-    public User(String name){
+    public User(String name) {
         this.name = name;
 
     }
@@ -45,6 +44,5 @@ public class User implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-
 
 }

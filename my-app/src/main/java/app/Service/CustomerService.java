@@ -14,33 +14,33 @@ import app.Util.Enums.Status;
 import app.Util.OrderDetails;
 import app.Util.Communication_Classes.OrderComm;
 
-
 @Stateless
 public class CustomerService {
 
     @PersistenceContext
     private EntityManager em;
 
-    public CustomerService(){}
+    public CustomerService() {
+    }
 
     public OrderDetails createOrder(OrderComm orderComm) {
         Orders order = new Orders();
-        for(int i = 0; i < orderComm.meals.size(); i++){
+        for (int i = 0; i < orderComm.meals.size(); i++) {
             order.addItemsToArray(new Meal(orderComm.meals.get(i)));
         }
         // TypedQuery<Restaurant> query2 = em.createQuery(
-        //     "Select r from Restaurant r where r.id =?1",
-        //         Restaurant.class);
+        // "Select r from Restaurant r where r.id =?1",
+        // Restaurant.class);
         // query2.setParameter(1, resturantId);
         // Restaurant restaurant = query2.getSingleResult();
         // order.setRestaurant(restaurant);
 
         TypedQuery<Runner> query = em.createQuery(
-            "Select r from Runner r where r.status = app.Util.Enums.Status.AVAILABLE",
+                "Select r from Runner r where r.status = app.Util.Enums.Status.AVAILABLE",
                 Runner.class);
         query.setMaxResults(1);
         List<Runner> runners = query.getResultList();
-        if(runners.size() == 0)
+        if (runners.size() == 0)
             throw new NullPointerException();
 
         Runner runner = runners.get(0);
@@ -77,7 +77,7 @@ public class CustomerService {
         return (ArrayList<Restaurant>) query.getResultList();
     }
 
-    public Orders getOrder(int id){
+    public Orders getOrder(int id) {
         TypedQuery<Orders> query = em.createQuery(
                 "Select o from Order o where o.id =?1",
                 Orders.class);

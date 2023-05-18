@@ -7,7 +7,7 @@ import javax.persistence.OneToOne;
 
 import app.Util.Communication_Classes.UserComm;
 
-public class RestaurantOwner extends User{
+public class RestaurantOwner extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,11 +19,11 @@ public class RestaurantOwner extends User{
         super(userComm.name);
     }
 
-    public void setRestaurant(Restaurant restaurant){
+    public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 
-    public Restaurant getRestaurant(){
+    public Restaurant getRestaurant() {
         return restaurant;
     }
 }

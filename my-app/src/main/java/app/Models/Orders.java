@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 @Entity
-public class Orders implements Serializable{
+public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,16 +26,15 @@ public class Orders implements Serializable{
     @JoinColumn(name = "fk_runnerId")
     private Runner runner;
 
-    // @ManyToOne
-    // @JoinColumn(name = "fk_restaurantId")
-    // private Restaurant restaurant;
+    @ManyToOne
+    @JoinColumn(name = "fk_restaurantId")
+    private Restaurant restaurant;
 
     private OrderStatus orderStatus;
 
-    public Orders(){
+    public Orders() {
         orderStatus = OrderStatus.PREPARING;
     }
-
 
     private double calculateTotalPrice() {
         double sum = 0;
@@ -58,11 +57,11 @@ public class Orders implements Serializable{
     }
 
     // public Restaurant getRestaurant() {
-    //     return restaurant;
+    // return restaurant;
     // }
 
     // public void setRestaurant(Restaurant restaurant) {
-    //     this.restaurant = restaurant;
+    // this.restaurant = restaurant;
     // }
 
     public Runner getRunner() {

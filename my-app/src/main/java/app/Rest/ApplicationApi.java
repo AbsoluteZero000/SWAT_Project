@@ -1,5 +1,7 @@
 package app.Rest;
 
+import java.util.List;
+
 import javax.ejb.*;
 import javax.inject.Inject;
 import app.Models.Restaurant;
@@ -16,6 +18,7 @@ import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Communication_Classes.UserComm;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
@@ -31,31 +34,37 @@ public class ApplicationApi {
     @Inject
     RestaurantOwnerService ownerService = new RestaurantOwnerService();
 
-    //needs to be parsed correctly
+    // needs to be parsed correctly
     @POST
     @Path("addUser")
-    public User addUser(UserComm userComm){
+    public User addUser(UserComm userComm) {
         return userService.addUser(new User(userComm));
     }
 
     @POST
     @Path("addRunner")
-    public Runner addRunner(RunnerComm runner){
+    public Runner addRunner(RunnerComm runner) {
         return runnerService.addRunner(runner);
 
     }
 
     @POST
     @Path("createOrder")
-    public OrderDetails createOrder(OrderComm orderComm ) {
+    public OrderDetails createOrder(OrderComm orderComm) {
         return customerService.createOrder(orderComm);
     }
 
-    //needs some work
+    // needs some work
     @POST
     @Path("createRestaurant")
-    public Restaurant createRestaurant(RestaurantComm restComm){
+    public Restaurant createRestaurant(RestaurantComm restComm) {
         return ownerService.addRestaurant(restComm);
+    }
+
+    @GET
+    @Path("getRestaurantDetails")
+    public Restaurant getRestaurantDetails(@QueryParam("1") int id) {
+        return ownerService.getRestaurantDetails(id);
     }
 
 }

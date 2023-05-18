@@ -26,19 +26,20 @@ public class Runner extends User {
     @OneToMany(mappedBy = "runner", fetch = FetchType.EAGER)
     private Set<Orders> orders;
 
-    public Runner(){
+    public Runner() {
         super("");
         status = Status.AVAILABLE;
         deliveryFees = 0;
 
     }
-    public Runner(RunnerComm runnerComm){
+
+    public Runner(RunnerComm runnerComm) {
         super(runnerComm.name);
         deliveryFees = runnerComm.deliveryFees;
         this.status = Status.AVAILABLE;
     }
 
-    public Runner(String name, int deliveryFees){
+    public Runner(String name, int deliveryFees) {
         super(name);
         this.status = Status.AVAILABLE;
         this.deliveryFees = deliveryFees;
