@@ -21,12 +21,7 @@ public class User {
     @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-
-    public User(UserComm userComm){
-        this.email = userComm.email;
-        this.name  = userComm.name;
-        this.role = userComm.role;
-    }
+    
     public User(String email, String name, String role){
         this.email = email;
         this.name = name;
