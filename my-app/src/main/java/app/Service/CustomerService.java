@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery;
 import app.Util.Exceptions.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 import app.Models.*;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
@@ -28,12 +28,15 @@ public class CustomerService {
         for (int i = 0; i < orderComm.meals.size(); i++) {
             order.addItemsToArray(new Meal(orderComm.meals.get(i)));
         }
-        // TypedQuery<Restaurant> query2 = em.createQuery(
-        // "Select r from Restaurant r where r.id =?1",
-        // Restaurant.class);
-        // query2.setParameter(1, resturantId);
-        // Restaurant restaurant = query2.getSingleResult();
-        // order.setRestaurant(restaurant);
+
+        TypedQuery<Restaurant> query2 = em.createQuery(
+        "Select r from Restaurant r where r.id =?1",
+        Restaurant.class);
+        query2.setParameter(1, orderComm.restaurantId);
+        Restaurant restaurant = query2.getSingleResult();
+
+        order.setRestaurant(restaurant);
+        restaurant.addOrder(order);
 
         TypedQuery<Runner> query = em.createQuery(
                 "Select r from Runner r where r.status = app.Util.Enums.Status.AVAILABLE",
@@ -41,7 +44,7 @@ public class CustomerService {
         query.setMaxResults(1);
         List<Runner> runners = query.getResultList();
         if (runners.size() == 0)
-            throw new NullPointerException();
+            return null;
 
         Runner runner = runners.get(0);
         runner.setStatus(Status.BUSY);
@@ -54,26 +57,26 @@ public class CustomerService {
         return new OrderDetails(order);
     }
 
-    public void editOrder(int id, ArrayList<Meal> meals) throws OrderCanceledException, NullPointerException {
+    public OrderDetails editOrder(Orders order) throws OrderCancelledException, NullPointerException {
         TypedQuery<Orders> query = em.createQuery(
                 "Select o from Orders o where o.id =?1",
                 Orders.class);
-        query.setParameter(1, id);
+        query.setParameter(1, order.getId());
         Orders tempOrder = query.getSingleResult();
 
         if (tempOrder == null)
             throw new NullPointerException("the order you have entered the id of doesn't exist");
 
         if (tempOrder.getOrderStatus() == OrderStatus.CANCELED)
-            throw new OrderCanceledException();
+            throw new OrderCancelledException();
 
-        tempOrder.setMealList(meals);
+        tempOrder.setMealList(order.getMealsArray());
         em.merge(tempOrder);
+        return new OrderDetails(tempOrder);
     }
 
     public ArrayList<Restaurant> getAllRestaurants() {
-
-        TypedQuery<Restaurant> query = em.createQuery("select r from Resturant r", Restaurant.class);
+        TypedQuery<Restaurant> query = em.createQuery("select r from Restaurant r", Restaurant.class);
         return (ArrayList<Restaurant>) query.getResultList();
     }
 
@@ -83,6 +86,14 @@ public class CustomerService {
                 Orders.class);
         query.setParameter(1, id);
         return query.getSingleResult();
+    }
+
+    public Set<Meal> getMenu(int id){
+        TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
+            Restaurant.class);
+        query.setParameter("id", id);
+        Restaurant restaurant = query.getSingleResult();
+        return restaurant.getMenu();
     }
 
 }

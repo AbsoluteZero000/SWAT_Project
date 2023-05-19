@@ -2,13 +2,11 @@ package app.Models;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-// import javax.persistence.JoinColumn;
-// import javax.persistence.OneToOne;
 import javax.persistence.OneToOne;
 
 import app.Util.Communication_Classes.UserComm;
@@ -20,8 +18,7 @@ public class User implements Serializable {
     private int id;
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "restaurant_id")
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
     private Restaurant restaurant;
 
     public User(UserComm userComm) {
@@ -32,7 +29,7 @@ public class User implements Serializable {
         this.name = name;
 
     }
-
+    public User(){}
     public int getId() {
         return id;
     }

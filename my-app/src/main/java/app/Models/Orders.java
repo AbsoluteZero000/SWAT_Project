@@ -2,6 +2,7 @@ package app.Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import app.Util.Enums.OrderStatus;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +18,7 @@ public class Orders implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private ArrayList<Meal> itemsArray = new ArrayList<Meal>();
+    private ArrayList<Meal> orderedMeals = new ArrayList<Meal>();
 
     @Transient
     private double totalPrice;
@@ -38,8 +39,8 @@ public class Orders implements Serializable {
 
     private double calculateTotalPrice() {
         double sum = 0;
-        for (int i = 0; i < itemsArray.size(); i++) {
-            sum += itemsArray.get(i).getPrice();
+        for (int i = 0; i < orderedMeals.size(); i++) {
+            sum += orderedMeals.get(i).getPrice();
         }
         return sum;
     }
@@ -48,21 +49,22 @@ public class Orders implements Serializable {
         return id;
     }
 
-    public ArrayList<Meal> getItemsArray() {
-        return itemsArray;
+    public ArrayList<Meal> getMealsArray() {
+        return orderedMeals;
     }
 
     public double getTotalPrice() {
+        calculateTotalPrice();
         return totalPrice;
     }
 
-    // public Restaurant getRestaurant() {
-    // return restaurant;
-    // }
+    public int getRestaurantId() {
+        return restaurant.getId();
+    }
 
-    // public void setRestaurant(Restaurant restaurant) {
-    // this.restaurant = restaurant;
-    // }
+    public void setRestaurant(Restaurant restaurant) {
+    this.restaurant = restaurant;
+    }
 
     public Runner getRunner() {
         return runner;
@@ -72,12 +74,9 @@ public class Orders implements Serializable {
         return orderStatus;
     }
 
-    public ArrayList<Meal> getMealsList() {
-        return itemsArray;
-    }
 
     public void addItemsToArray(Meal meal) {
-        itemsArray.add(meal);
+        orderedMeals.add(meal);
         calculateTotalPrice();
     }
 
@@ -94,7 +93,9 @@ public class Orders implements Serializable {
     }
 
     public void setMealList(ArrayList<Meal> meals) {
-        itemsArray = meals;
+
+        for(int i = 0; i<meals.size(); i++)
+            orderedMeals.add(meals.get(i));
         calculateTotalPrice();
     }
 

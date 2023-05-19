@@ -10,15 +10,13 @@ public class OrderDetails {
     private ArrayList<Meal> itemsList;
     private double deliveryFees;
     private String runnerName;
-    private Orders order;
     private double totalReceipt;
 
     public OrderDetails(Orders order) {
-        this.order = order;
         date = LocalDateTime.now();
-        itemsList = order.getItemsArray();
-        // deliveryFees = order.getRunner().getDeliveryFees();
-        // runnerName = order.getRunner().getName();
+        itemsList = order.getMealsArray();
+        deliveryFees = order.getRunner().getDeliveryFees();
+        runnerName = order.getRunner().getName();
         totalReceipt = deliveryFees + order.getTotalPrice();
     }
 
@@ -61,7 +59,6 @@ public class OrderDetails {
     public ArrayList<Object> getReceipt() {
         ArrayList<Object> receipt = new ArrayList<>();
         receipt.add(date);
-        // receipt.add(order.getRestaurant().GetName());
         receipt.add(itemsList);
         receipt.add(deliveryFees);
         receipt.add(runnerName);

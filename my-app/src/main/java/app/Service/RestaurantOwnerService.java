@@ -1,14 +1,18 @@
 package app.Service;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import app.Models.Meal;
 import app.Models.Restaurant;
 import app.Models.User;
+import app.Util.RestaurantReport;
+import app.Util.Communication_Classes.EditRestComm;
 import app.Util.Communication_Classes.RestaurantComm;
 
 @Stateless
@@ -19,52 +23,68 @@ public class RestaurantOwnerService {
     public Restaurant addRestaurant(RestaurantComm restComm) {
 
         User user = new User(restComm.owner);
-        // return user;
-        Restaurant restaurant = new Restaurant(restComm.name, user);
-        try {
-            // return restaurant;
-            em.persist(user);
-            em.persist(restaurant);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        Restaurant restaurant = new Restaurant(restComm);
+        restaurant.setOwner(user);
+        Set<Meal> menu = new HashSet<Meal>();
+
+        for(int i = 0 ; i < restComm.menu.size(); i++){
+            Meal meal = new Meal(restComm.menu.get(i));
+            meal.setRestaurant(restaurant);
+            menu.add(meal);
+            em.persist(meal);
         }
+
+        restaurant.setMenu(menu);
+
+        em.persist(user);
+        em.persist(restaurant);
+
         return restaurant;
     }
 
-    // public void editRestaurantMenu(int id, Set<Meal> meals) {
+    public Restaurant editRestaurantMenu(EditRestComm editRestComm) {
+        TypedQuery<Restaurant> query = em.createQuery(
+            "select r from Restaurant r where r.id = ?1",
+            Restaurant.class);
+        System.out.println(editRestComm.restId);
+        query.setParameter(1, editRestComm.restId);
+        Restaurant restaurant = query.getSingleResult();
 
-    // TypedQuery<Restaurant> query = em.createQuery("select r from Restaurant r
-    // where r.id =? 1", Restaurant.class);
-    // query.setParameter(1, meals);
-    // Restaurant actualRestaurant = query.getSingleResult();
+        if (restaurant == null)
+            return null;
 
-    // if (actualRestaurant == null)
-    // throw new NullPointerException();
+        Iterator<Meal> meals = restaurant.getMenu().iterator();
+        while(meals.hasNext()){
+            em.remove(meals.next());
+        }
+        Set<Meal> menu = new HashSet<Meal>();
+        for(int i = 0 ; i < editRestComm.restComm.menu.size(); i++){
+            Meal meal = new Meal(editRestComm.restComm.menu.get(i));
+            meal.setRestaurant(restaurant);
+            menu.add(meal);
+            em.persist(meal);
+        }
 
-    // actualRestaurant.setMeals(meals);
-    // em.merge(actualRestaurant);
-    // }
+        restaurant.setMenu(menu);
+        em.merge(restaurant);
+        return restaurant;
+    }
 
     public Restaurant getRestaurantDetails(int id) {
+        System.out.println("hey");
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
-                Restaurant.class);
+            Restaurant.class);
+        query.setParameter("id", id);
+        Restaurant restaurant = query.getSingleResult();
+        return restaurant;
+    }
+
+    public RestaurantReport getRestaurantReport(int id){
+        TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r Join r.menu m WHERE r.id =:id",
+            Restaurant.class);
         query.setParameter("id", id);
         List<Restaurant> restaurants = query.getResultList();
-        if (restaurants.isEmpty()) {
-            Restaurant res = new Restaurant();
-            res.setName("null");
-            return res;
-        } else {
-            return restaurants.get(0);
-        }
+        return new RestaurantReport(restaurants.get(0));
     }
-    // public Restaurant addRestaurant(String name, User owner){
-    // Restaurant restaurant = new Restaurant(name, owner);
-    // em.persist(restaurant);
-    // return restaurant;
-    // }
-    // public RestaurantReport getRestaurantReport(Restaurant restaurant) {
-    // return new RestaurantReport(restaurant);
-    // }
 
 }

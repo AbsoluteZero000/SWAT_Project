@@ -3,10 +3,13 @@ package app.Models;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -18,14 +21,16 @@ public class Restaurant implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @OneToOne(mappedBy = "restaurant")
+
+    @OneToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Orders> orders;
 
-    @OneToMany(mappedBy = "restaurant")
-    private Set<Meal> meals;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Meal> menu ;
 
     public Restaurant() {
     }
@@ -33,14 +38,6 @@ public class Restaurant implements Serializable {
     public Restaurant(String name, User owner) {
         this.setName(name);
         this.setOwner(owner);
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public User getOwner() {
-        return owner;
     }
 
     public Restaurant(RestaurantComm restComm) {
@@ -56,36 +53,43 @@ public class Restaurant implements Serializable {
         return name;
     }
 
-    // public User getOwnerId() {
-    // return owner;
-    // }
+    public Set<Meal> getMenu() {
+    return menu;
+    }
 
-    // public Set<Meal> getMeals() {
-    // return meals;
-    // }
+    public User getOwner() {
+        return owner;
+    }
 
-    // public Set<Orders> getOrders() {
-    // return orders;
-    // }
+    public Set<Orders> getOrders() {
+        return orders;
+    }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    // public void setOwnerId(User owner) {
-    // this.owner = owner;
-    // }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    // public void setMeals(Set<Meal> meals) {
-    // this.meals = meals;
-    // }
+    public void setMenu(Set<Meal> menu) {
+    this.menu = menu;
+    }
 
-    // public void setOrders(Set<Orders> orders) {
-    // this.orders = orders;
-    // }
+    public void addItemsToMenu(Meal meal){
+        menu.add(meal);
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void addOrder(Orders order){
+        this.orders.add(order);
+    }
+    public void setOrders(Set<Orders> orders) {
+        this.orders = orders;
+    }
 
 }

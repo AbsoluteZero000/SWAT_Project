@@ -18,10 +18,12 @@ public class Meal implements Serializable {
     private int id;
     private String name;
     private double price;
+
     @ManyToOne
-    @JoinColumn(name = "fk_restaurantId")
+    @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
+    public Meal(){}
     public Meal(MealComm mealComm) {
         this.name = mealComm.name;
         this.price = mealComm.price;
@@ -52,7 +54,16 @@ public class Meal implements Serializable {
         this.price = price;
     }
 
+    public void setRestaurant(Restaurant res){
+        this.restaurant = res;
+    }
+
     public double getPrice() {
         return this.price;
     }
+
+
+
+
+
 }
