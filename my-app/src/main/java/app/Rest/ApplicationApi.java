@@ -109,7 +109,6 @@ public class ApplicationApi {
 
     @GET
     @Path("getMenu")
-    // it takes restaurant id as parameter
     public Set<Meal> getMenu(int id){
         return customerService.getMenu(id);
     }
