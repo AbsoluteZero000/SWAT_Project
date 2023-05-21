@@ -45,7 +45,7 @@ public class Restaurant implements Serializable {
 
     public Restaurant(RestaurantComm restComm) {
         this.name = restComm.name;
-        this.owner = new User(restComm.owner);
+        this.owner = new User(restComm.owner.name);
     }
 
     public int getId() {

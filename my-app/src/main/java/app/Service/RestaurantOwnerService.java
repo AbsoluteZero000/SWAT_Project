@@ -3,6 +3,8 @@ package app.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +16,7 @@ import app.Util.RestaurantReport;
 import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
 
-
+@PermitAll
 @Stateless
 public class RestaurantOwnerService {
     @PersistenceContext
@@ -22,7 +24,7 @@ public class RestaurantOwnerService {
 
     public Restaurant addRestaurant(RestaurantComm restComm) {
 
-        User user = new User(restComm.owner);
+        User user = new User(restComm.owner.name);
         Restaurant restaurant = new Restaurant(restComm);
         restaurant.setOwner(user);
         Set<Meal> menu = new HashSet<Meal>();
