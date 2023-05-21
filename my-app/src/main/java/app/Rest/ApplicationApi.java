@@ -41,18 +41,18 @@ public class ApplicationApi {
     @Inject
     RestaurantOwnerService ownerService = new RestaurantOwnerService();
 
+
     @POST
     @Path("init")
-    public void init() {
+    public void init(){
         userService.init();
     }
 
     @PUT
     @Path("editMenu")
-    public Restaurant editRestaurantMenu(EditRestComm editRestComm) {
+    public Restaurant editRestaurantMenu(EditRestComm editRestComm){
         return ownerService.editRestaurantMenu(editRestComm);
     }
-
     @POST
     @Path("addUser")
     public User addUser(UserComm userComm) {
@@ -71,18 +71,17 @@ public class ApplicationApi {
     public OrderDetails createOrder(OrderComm orderComm) {
         return customerService.createOrder(orderComm);
     }
-
     @PUT
     @Path("editOrder")
-    public OrderDetails editOrder(Orders order) throws NullPointerException, OrderCancelledException {
+    public OrderDetails editOrder(Orders order) throws NullPointerException, OrderCancelledException{
         return customerService.editOrder(order);
     }
-
     @GET
     @Path("getOrder")
-    public OrderDetails getOrder(@QueryParam("id") int id) {
+    public OrderDetails getOrder(@QueryParam("id") int id){
         return new OrderDetails(customerService.getOrder(id));
     }
+
 
     @POST
     @Path("createRestaurant")
@@ -98,37 +97,35 @@ public class ApplicationApi {
 
     @GET
     @Path("getRestaurantReport")
-    public RestaurantReport getRestaurantReport(int id) {
+    public RestaurantReport getRestaurantReport(int id){
         return ownerService.getRestaurantReport(id);
     }
 
     @GET
     @Path("getAllRestaurants")
-    public ArrayList<Restaurant> getAllRestaurants() {
+    public ArrayList<Restaurant> getAllRestaurants(){
         return customerService.getAllRestaurants();
     }
 
     @GET
     @Path("getMenu")
+<<<<<<< HEAD
+=======
+    // it takes restaurant id as parameter
+>>>>>>> parent of 219d1f7 (adding create menu method)
     public Set<Meal> getMenu(int id){
         return customerService.getMenu(id);
     }
 
     @GET
     @Path("getNumberOfTrips")
-    public int getNumberOfTrips(@QueryParam("id") int id) {
+    public int getNumberOfTrips(@QueryParam("id")int id){
         return runnerService.getNumberOfTrips(id);
     }
 
     @PUT
     @Path("markOrder")
-    public OrderDetails markOrder(@QueryParam("id") int id) {
+    public OrderDetails markOrder(@QueryParam("id")int id){
         return runnerService.markOrder(id);
     }
-
-    // @POST
-    // @Path("addMenu")
-    // public Restaurant createMenu(OrderComm orderComm){
-    // return ownerService.createMenu(orderComm);
-    // }
 }

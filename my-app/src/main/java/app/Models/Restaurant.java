@@ -1,8 +1,6 @@
 package app.Models;
 
 import java.io.Serializable;
-// import java.util.ArrayList;
-// import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,23 +30,10 @@ public class Restaurant implements Serializable {
     private Set<Orders> orders;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Meal> menu;
-    // private Set<Set<Meal>> menus;
+    private Set<Meal> menu ;
 
     public Restaurant() {
-        // menus = new HashSet<>();
     }
-
-    // public Set<Set<Meal>> getMenus() {
-    // return menus;
-    // }
-
-    // public void setMenus(ArrayList<Meal> menuParam) {
-    //     Set<Meal> tempMeals = new HashSet<>();
-    //     for (int i = 0; i < menuParam.size(); i++)
-    //         tempMeals.add(menuParam.get(i));
-    //     this.menus.add(tempMeals);
-    // }
 
     public Restaurant(String name, User owner) {
         this.setName(name);
@@ -69,7 +54,7 @@ public class Restaurant implements Serializable {
     }
 
     public Set<Meal> getMenu() {
-        return menu;
+    return menu;
     }
 
     public User getOwner() {
@@ -89,10 +74,10 @@ public class Restaurant implements Serializable {
     }
 
     public void setMenu(Set<Meal> menu) {
-        this.menu = menu;
+    this.menu = menu;
     }
 
-    public void addItemsToMenu(Meal meal) {
+    public void addItemsToMenu(Meal meal){
         menu.add(meal);
     }
 
@@ -100,10 +85,9 @@ public class Restaurant implements Serializable {
         this.owner = owner;
     }
 
-    public void addOrder(Orders order) {
+    public void addOrder(Orders order){
         this.orders.add(order);
     }
-
     public void setOrders(Set<Orders> orders) {
         this.orders = orders;
     }
