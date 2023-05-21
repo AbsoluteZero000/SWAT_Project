@@ -6,12 +6,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import app.Util.Exceptions.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import app.Models.*;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
 import app.Util.OrderDetails;
+import app.Util.Communication_Classes.MealComm;
 import app.Util.Communication_Classes.OrderComm;
 
 @Stateless
@@ -23,16 +25,26 @@ public class CustomerService {
     public CustomerService() {
     }
 
-    public OrderDetails createOrder(OrderComm orderComm) {
+
+    public OrderDetails createOrder(int restId, ArrayList<Integer> ids) {
         Orders order = new Orders();
-        for (int i = 0; i < orderComm.meals.size(); i++) {
-            order.addItemsToArray(new Meal(orderComm.meals.get(i)));
+        TypedQuery<Meal> query3 = em.createQuery(
+            "Select m from Meal m  where m.id =?1",
+            Meal.class);
+        for (int i = 0; i < ids.size(); i++) {
+            query3.setParameter(1,ids.get(0));
+            Meal meal = query3.getSingleResult();
+            if(meal == null)
+                throw new NullPointerException("meal doesn't exist");
+
+            meal.addOrderTo(order);
+            order.addItemsToArray(meal);
         }
 
         TypedQuery<Restaurant> query2 = em.createQuery(
         "Select r from Restaurant r where r.id =?1",
         Restaurant.class);
-        query2.setParameter(1, orderComm.restaurantId);
+        query2.setParameter(1, restId);
         Restaurant restaurant = query2.getSingleResult();
 
         order.setRestaurant(restaurant);
@@ -44,7 +56,7 @@ public class CustomerService {
         query.setMaxResults(1);
         List<Runner> runners = query.getResultList();
         if (runners.size() == 0)
-            return null;
+            throw new NullPointerException("no available runners");
 
         Runner runner = runners.get(0);
         runner.setStatus(Status.BUSY);
@@ -57,22 +69,40 @@ public class CustomerService {
         return new OrderDetails(order);
     }
 
-    public OrderDetails editOrder(Orders order) throws OrderCancelledException, NullPointerException {
+    public OrderDetails editOrder(int orderId, ArrayList<Integer> ids) throws OrderCancelledException, NullPointerException {
+        Set<Meal> meals = new HashSet<Meal>();
+
+        TypedQuery<Meal> query3 = em.createQuery(
+            "Select m from Meal m  where m.id =?1",
+            Meal.class);
+        for (int i = 0; i < ids.size(); i++) {
+            query3.setParameter(1,ids.get(i));
+            Meal meal = query3.getSingleResult();
+            if(meal == null)
+                throw new NullPointerException("meal doesn't exist");
+            meals.add(meal);
+        }
         TypedQuery<Orders> query = em.createQuery(
                 "Select o from Orders o where o.id =?1",
                 Orders.class);
-        query.setParameter(1, order.getId());
-        Orders tempOrder = query.getSingleResult();
+        query.setParameter(1, orderId);
+        Orders order = query.getSingleResult();
 
-        if (tempOrder == null)
+        if (order == null)
             throw new NullPointerException("the order you have entered the id of doesn't exist");
 
-        if (tempOrder.getOrderStatus() == OrderStatus.CANCELED)
+        for(Meal meal : order.getMealsArray() ){
+            meal.removeOrder(order);
+            em.merge(meal);
+        }
+
+        if (order.getOrderStatus() == OrderStatus.CANCELED)
             throw new OrderCancelledException();
 
-        tempOrder.setMealList(order.getMealsArray());
-        em.merge(tempOrder);
-        return new OrderDetails(tempOrder);
+
+        order.setMealList(meals);
+        em.merge(order);
+        return new OrderDetails(order);
     }
 
     public ArrayList<Restaurant> getAllRestaurants() {

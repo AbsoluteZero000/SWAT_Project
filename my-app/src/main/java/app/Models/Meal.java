@@ -5,10 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import app.Util.Communication_Classes.MealComm;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 public class Meal implements Serializable {
@@ -22,6 +24,9 @@ public class Meal implements Serializable {
     @ManyToOne
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
+
+    @ManyToMany(mappedBy = "orderedMeals")
+    Set<Orders> order;
 
     public Meal(){}
     public Meal(MealComm mealComm) {
@@ -50,6 +55,10 @@ public class Meal implements Serializable {
         this.id = id;
     }
 
+    public void addOrderTo(Orders order){
+        this.order.add(order);
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }
@@ -60,6 +69,10 @@ public class Meal implements Serializable {
 
     public double getPrice() {
         return this.price;
+    }
+
+    public void removeOrder(Orders order){
+        this.order.remove(order);
     }
 
 

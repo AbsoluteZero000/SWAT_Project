@@ -21,6 +21,7 @@ import app.Util.Communication_Classes.OrderComm;
 import app.Util.Communication_Classes.RestaurantComm;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Communication_Classes.UserComm;
+import app.Util.Communication_Classes.idsWrapper;
 import app.Util.Exceptions.OrderCancelledException;
 
 import javax.ws.rs.*;
@@ -67,15 +68,17 @@ public class ApplicationApi {
     }
 
     @POST
-    @Path("createOrder")
-    public OrderDetails createOrder(OrderComm orderComm) {
-        return customerService.createOrder(orderComm);
+    @Path("{id}/createOrder")
+    public OrderDetails createOrder(@PathParam("id") int id, idsWrapper ids) {
+        return customerService.createOrder(id, ids.ids);
     }
+
     @PUT
-    @Path("editOrder")
-    public OrderDetails editOrder(Orders order) throws NullPointerException, OrderCancelledException{
-        return customerService.editOrder(order);
+    @Path("{id}/editOrder")
+    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids) throws NullPointerException, OrderCancelledException{
+        return customerService.editOrder(id, ids.ids);
     }
+
     @GET
     @Path("getOrder")
     public OrderDetails getOrder(@QueryParam("id") int id){

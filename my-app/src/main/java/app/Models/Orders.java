@@ -2,13 +2,16 @@ package app.Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+import java.util.HashSet;
+import java.util.Set;
 import app.Util.Enums.OrderStatus;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
@@ -18,7 +21,12 @@ public class Orders implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private ArrayList<Meal> orderedMeals = new ArrayList<Meal>();
+    @ManyToMany
+    @JoinTable(
+    name = "ordertable",
+    joinColumns = @JoinColumn(name = "Order_id"),
+    inverseJoinColumns = @JoinColumn(name = "meal_id"))
+    private Set<Meal> orderedMeals = new HashSet<Meal>();
 
     @Transient
     private double totalPrice;
@@ -39,8 +47,8 @@ public class Orders implements Serializable {
 
     private double calculateTotalPrice() {
         double sum = 0;
-        for (int i = 0; i < orderedMeals.size(); i++) {
-            sum += orderedMeals.get(i).getPrice();
+        for (Meal meals: orderedMeals) {
+            sum += meals.getPrice();
         }
         return sum;
     }
@@ -49,7 +57,7 @@ public class Orders implements Serializable {
         return id;
     }
 
-    public ArrayList<Meal> getMealsArray() {
+    public Set<Meal> getMealsArray() {
         return orderedMeals;
     }
 
@@ -92,10 +100,8 @@ public class Orders implements Serializable {
         this.orderStatus = status;
     }
 
-    public void setMealList(ArrayList<Meal> meals) {
-
-        for(int i = 0; i<meals.size(); i++)
-            orderedMeals.add(meals.get(i));
+    public void setMealList(Set<Meal> meals) {
+        this.orderedMeals = meals;
         calculateTotalPrice();
     }
 

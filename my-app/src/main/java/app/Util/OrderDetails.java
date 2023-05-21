@@ -2,12 +2,14 @@ package app.Util;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Set;
+
 import app.Models.Meal;
 import app.Models.Orders;
 
 public class OrderDetails {
     private LocalDateTime date;
-    private ArrayList<Meal> itemsList;
+    private Set<Meal> itemsList;
     private double deliveryFees;
     private String runnerName;
     private double totalReceipt;
@@ -28,11 +30,11 @@ public class OrderDetails {
         this.date = date;
     }
 
-    public ArrayList<Meal> getItemsList() {
+    public Set<Meal> getItemsList() {
         return itemsList;
     }
 
-    public void setItemsList(ArrayList<Meal> itemsList) {
+    public void setItemsList(Set<Meal> itemsList) {
         this.itemsList = itemsList;
     }
 
