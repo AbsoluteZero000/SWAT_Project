@@ -109,10 +109,6 @@ public class ApplicationApi {
 
     @GET
     @Path("getMenu")
-<<<<<<< HEAD
-=======
-    // it takes restaurant id as parameter
->>>>>>> parent of 219d1f7 (adding create menu method)
     public Set<Meal> getMenu(int id){
         return customerService.getMenu(id);
     }
