@@ -1,11 +1,7 @@
 package app.Util;
 
-import java.util.ArrayList;
-import java.util.Set;
 
-import javax.ejb.Stateless;
 import app.Models.*;
-import app.Util.Enums.*;
 
 public class RestaurantReport {
 
@@ -18,15 +14,15 @@ public class RestaurantReport {
         noOfCancelledOrders = 0;
         noOfCompeletedOrders = 0;
 
-        Order[] orders = (Order[])restaurant.getOrders().toArray();
-        for (int i = 0; i < orders.length; i++) {
-            if (orders[i].getOrderStatus() == OrderStatus.DELIVERED)
-                noOfCompeletedOrders++;
-            else if (orders[i].getOrderStatus() == OrderStatus.CANCELED)
-                noOfCancelledOrders++;
+        // Order[] orders = (Order[])restaurant.getOrders().toArray();
+        // for (int i = 0; i < orders.length; i++) {
+        //     if (orders[i].getOrderStatus() == OrderStatus.DELIVERED)
+        //         noOfCompeletedOrders++;
+        //     else if (orders[i].getOrderStatus() == OrderStatus.CANCELED)
+        //         noOfCancelledOrders++;
 
-            earnedAmount += orders[i].getTotalPrice();
-        }
+        //     earnedAmount += orders[i].getTotalPrice();
+        // }
     }
 
     public int getEarnedAmount() {

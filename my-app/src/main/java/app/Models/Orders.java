@@ -1,23 +1,33 @@
 package app.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import app.Util.Enums.OrderStatus;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 @Entity
-public class Order {
+public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private ArrayList<Meal> itemsArray;
+    @ManyToMany
+    @JoinTable(
+    name = "ordertable",
+    joinColumns = @JoinColumn(name = "Order_id"),
+    inverseJoinColumns = @JoinColumn(name = "meal_id"))
+    private Set<Meal> orderedMeals = new HashSet<Meal>();
+
     @Transient
     private double totalPrice;
 
@@ -31,10 +41,14 @@ public class Order {
 
     private OrderStatus orderStatus;
 
+    public Orders() {
+        orderStatus = OrderStatus.PREPARING;
+    }
+
     private double calculateTotalPrice() {
         double sum = 0;
-        for (int i = 0; i < itemsArray.size(); i++) {
-            sum += itemsArray.get(i).getPrice();
+        for (Meal meals: orderedMeals) {
+            sum += meals.getPrice();
         }
         return sum;
     }
@@ -43,20 +57,21 @@ public class Order {
         return id;
     }
 
-    public ArrayList<Meal> getItemsArray() {
-        return itemsArray;
+    public Set<Meal> getMealsArray() {
+        return orderedMeals;
     }
 
     public double getTotalPrice() {
+        calculateTotalPrice();
         return totalPrice;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public int getRestaurantId() {
+        return restaurant.getId();
     }
 
     public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    this.restaurant = restaurant;
     }
 
     public Runner getRunner() {
@@ -67,12 +82,9 @@ public class Order {
         return orderStatus;
     }
 
-    public ArrayList<Meal> getMealsList() {
-        return itemsArray;
-    }
 
     public void addItemsToArray(Meal meal) {
-        itemsArray.add(meal);
+        orderedMeals.add(meal);
         calculateTotalPrice();
     }
 
@@ -88,8 +100,8 @@ public class Order {
         this.orderStatus = status;
     }
 
-    public void setMealList(ArrayList<Meal> meals) {
-        itemsArray = meals;
+    public void setMealList(Set<Meal> meals) {
+        this.orderedMeals = meals;
         calculateTotalPrice();
     }
 

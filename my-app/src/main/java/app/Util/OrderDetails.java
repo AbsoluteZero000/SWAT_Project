@@ -2,21 +2,21 @@ package app.Util;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Set;
+
 import app.Models.Meal;
-import app.Models.Order;
+import app.Models.Orders;
 
 public class OrderDetails {
     private LocalDateTime date;
-    private ArrayList<Meal> itemsList;
+    private Set<Meal> itemsList;
     private double deliveryFees;
     private String runnerName;
-    private Order order;
     private double totalReceipt;
 
-    public OrderDetails(Order order) {
-        this.order = order;
+    public OrderDetails(Orders order) {
         date = LocalDateTime.now();
-        itemsList = order.getItemsArray();
+        itemsList = order.getMealsArray();
         deliveryFees = order.getRunner().getDeliveryFees();
         runnerName = order.getRunner().getName();
         totalReceipt = deliveryFees + order.getTotalPrice();
@@ -30,11 +30,11 @@ public class OrderDetails {
         this.date = date;
     }
 
-    public ArrayList<Meal> getItemsList() {
+    public Set<Meal> getItemsList() {
         return itemsList;
     }
 
-    public void setItemsList(ArrayList<Meal> itemsList) {
+    public void setItemsList(Set<Meal> itemsList) {
         this.itemsList = itemsList;
     }
 
@@ -58,14 +58,13 @@ public class OrderDetails {
         return totalReceipt;
     }
 
-    public ArrayList<Object> getRecipt() {
-        ArrayList<Object> recipt = new ArrayList<>();
-        recipt.add(date);
-        recipt.add(order.getRestaurant().GetName());
-        recipt.add(itemsList);
-        recipt.add(deliveryFees);
-        recipt.add(runnerName);
-        recipt.add(totalReceipt);
-        return recipt;
+    public ArrayList<Object> getReceipt() {
+        ArrayList<Object> receipt = new ArrayList<>();
+        receipt.add(date);
+        receipt.add(itemsList);
+        receipt.add(deliveryFees);
+        receipt.add(runnerName);
+        receipt.add(totalReceipt);
+        return receipt;
     }
 }

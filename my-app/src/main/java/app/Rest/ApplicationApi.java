@@ -1,21 +1,32 @@
 package app.Rest;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
-import javax.validation.constraints.Past;
-
-import app.Models.*;
 import app.Models.Restaurant;
-import app.Util.RestaurantReport;
-import app.Service.*;
+import app.Models.Runner;
+import app.Models.User;
+import app.Models.Meal;
+import app.Models.Orders;
+import app.Service.CustomerService;
+import app.Service.RestaurantOwnerService;
+import app.Service.RunnerService;
+import app.Service.UserService;
 import app.Util.OrderDetails;
+import app.Util.RestaurantReport;
+import app.Util.Communication_Classes.EditRestComm;
+import app.Util.Communication_Classes.OrderComm;
+import app.Util.Communication_Classes.RestaurantComm;
+import app.Util.Communication_Classes.RunnerComm;
+import app.Util.Communication_Classes.UserComm;
+import app.Util.Communication_Classes.idsWrapper;
+import app.Util.Exceptions.OrderCancelledException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,92 +34,97 @@ import javax.ws.rs.core.MediaType;
 @Path("/")
 public class ApplicationApi {
     @Inject
-    CustomerService customerService;
+    UserService userService = new UserService();
     @Inject
-    RunnerService runnerService;
+    RunnerService runnerService = new RunnerService();
     @Inject
-    ResturantOwnerService ownerService;
+    CustomerService customerService = new CustomerService();
+    @Inject
+    RestaurantOwnerService ownerService = new RestaurantOwnerService();
 
+
+    @POST
+    @Path("init")
+    public void init(){
+        userService.init();
+    }
+
+    @PUT
+    @Path("editMenu")
+    public Restaurant editRestaurantMenu(EditRestComm editRestComm){
+        return ownerService.editRestaurantMenu(editRestComm);
+    }
+    @POST
+    @Path("addUser")
+    public User addUser(UserComm userComm) {
+        return userService.addUser(new User(userComm));
+    }
+
+    @POST
+    @Path("addRunner")
+    public Runner addRunner(RunnerComm runner) {
+        return runnerService.addRunner(runner);
+
+    }
+
+    @POST
+    @Path("{id}/createOrder")
+    public OrderDetails createOrder(@PathParam("id") int id, idsWrapper ids) {
+        return customerService.createOrder(id, ids.ids);
+    }
+
+    @PUT
+    @Path("{id}/editOrder")
+    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids) throws NullPointerException, OrderCancelledException{
+        return customerService.editOrder(id, ids.ids);
+    }
+
+    @GET
+    @Path("getOrder")
+    public OrderDetails getOrder(@QueryParam("id") int id){
+        return new OrderDetails(customerService.getOrder(id));
+    }
 
 
     @POST
     @Path("createRestaurant")
-    @RolesAllowed("RestaurantOwner")
-    public void createMenu(Restaurant restaurant) {
-        try {
-            ownerService.createRestaurantMenu(restaurant);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    @PUT
-    @RolesAllowed("RestaurantOwner")
-    @Path("editRestaurantMenu")
-    public void editRestaurantMenu(ArrayList<Object> Args) {
-        Restaurant tempRestaurant = new Restaurant();
-        tempRestaurant.setMeals((Set<Meal>) Args.get(1));
-        tempRestaurant.setId((int) Args.get(0));
-        try{
-        ownerService.editRestaurantMenu(tempRestaurant);
-        } catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+    public Restaurant createRestaurant(RestaurantComm restComm) {
+        return ownerService.addRestaurant(restComm);
     }
 
     @GET
-    @RolesAllowed("RestaurantOwner")
     @Path("getRestaurantDetails")
-    public Restaurant getRestaurantDetails(int id) {
+    public Restaurant getRestaurantDetails(@QueryParam("id") int id) {
         return ownerService.getRestaurantDetails(id);
     }
 
     @GET
-    @RolesAllowed("RestaurantOwner")
     @Path("getRestaurantReport")
-    public RestaurantReport getRestaurantReport(int id) {
-        Restaurant restaurant = this.getRestaurantDetails(id);
-        return ownerService.getRestaurantReport(restaurant);
-    }
-
-    @Past
-    @RolesAllowed("Customer")
-    @Path("createOrder")
-    public OrderDetails createOrder(Order order) {
-        return customerService.createOrder(order);
-    }
-
-    @PUT
-    @RolesAllowed("Customer")
-    @Path("editOrder")
-    public void editOrder(ArrayList<Object> Args) {
-        Order order = new Order();
-        order.setId((int) Args.get(0));
-        order.setMealList((ArrayList<Meal>) Args.get(1));
+    public RestaurantReport getRestaurantReport(int id){
+        return ownerService.getRestaurantReport(id);
     }
 
     @GET
-    @Path("getAllRest")
-    @PermitAll
-    public ArrayList<Restaurant> getAllRestaurants() {
+    @Path("getAllRestaurants")
+    public ArrayList<Restaurant> getAllRestaurants(){
         return customerService.getAllRestaurants();
     }
 
-    @POST
-    @Path("markOrder")
-    @RolesAllowed("Runner")
-    public void markOrder(int id) {
-        try {
-            runnerService.markOrder(id);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    @GET
+    @Path("getMenu")
+    public Set<Meal> getMenu(int id){
+        return customerService.getMenu(id);
     }
 
     @GET
-    @Path("NoOfTrips")
-    @RolesAllowed("Runner")
-    public int getNumberOfTrips(int id) {
+    @Path("getNumberOfTrips")
+    public int getNumberOfTrips(@QueryParam("id")int id){
         return runnerService.getNumberOfTrips(id);
+    }
+
+    @PUT
+    @Path("markOrder")
+    public OrderDetails markOrder(@QueryParam("id")int id){
+        return runnerService.markOrder(id);
     }
 }
