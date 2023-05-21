@@ -28,6 +28,26 @@ public class Orders implements Serializable {
     private Runner runner;
 
     @ManyToOne
+    @JoinColumn(name = "customer_Id")
+    private User customer;
+
+    public ArrayList<Meal> getOrderedMeals() {
+        return orderedMeals;
+    }
+
+    public void setOrderedMeals(ArrayList<Meal> orderedMeals) {
+        this.orderedMeals = orderedMeals;
+    }
+
+    public User getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
+    }
+
+    @ManyToOne
     @JoinColumn(name = "fk_restaurantId")
     private Restaurant restaurant;
 
@@ -63,7 +83,11 @@ public class Orders implements Serializable {
     }
 
     public void setRestaurant(Restaurant restaurant) {
-    this.restaurant = restaurant;
+        this.restaurant = restaurant;
+    }
+
+    public Restaurant getRestaurant() {
+        return this.restaurant;
     }
 
     public Runner getRunner() {
@@ -73,7 +97,6 @@ public class Orders implements Serializable {
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
-
 
     public void addItemsToArray(Meal meal) {
         orderedMeals.add(meal);
@@ -94,7 +117,7 @@ public class Orders implements Serializable {
 
     public void setMealList(ArrayList<Meal> meals) {
 
-        for(int i = 0; i<meals.size(); i++)
+        for (int i = 0; i < meals.size(); i++)
             orderedMeals.add(meals.get(i));
         calculateTotalPrice();
     }

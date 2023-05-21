@@ -30,8 +30,8 @@ public class CustomerService {
         }
 
         TypedQuery<Restaurant> query2 = em.createQuery(
-        "Select r from Restaurant r where r.id =?1",
-        Restaurant.class);
+                "Select r from Restaurant r where r.id =?1",
+                Restaurant.class);
         query2.setParameter(1, orderComm.restaurantId);
         Restaurant restaurant = query2.getSingleResult();
 
@@ -88,9 +88,15 @@ public class CustomerService {
         return query.getSingleResult();
     }
 
-    public Set<Meal> getMenu(int id){
+    public List<Orders> getListOfOrders(int id) {
+        TypedQuery<Orders> query = em.createQuery("select o from Orders o where o.customer_Id =:id", Orders.class);
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+
+    public Set<Meal> getMenu(int id) {
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
-            Restaurant.class);
+                Restaurant.class);
         query.setParameter("id", id);
         Restaurant restaurant = query.getSingleResult();
         return restaurant.getMenu();
