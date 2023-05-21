@@ -23,9 +23,9 @@ public class RestaurantOwnerService {
 
     public Restaurant createMenu(OrderComm orderComm) {
         TypedQuery<Restaurant> query = em.createQuery(
-                "select r from Restaurant r where r.id = :id",
+                "select r from Restaurant r where r.id = ?1",
                 Restaurant.class);
-        query.setParameter("id", orderComm.restaurantId);
+        query.setParameter(1, orderComm.restaurantId);
         Restaurant restaurant = query.getSingleResult();
         for (int i = 0; i < orderComm.meals.size(); i++) {
             if (em.contains(orderComm.meals.get(i)))
@@ -40,7 +40,6 @@ public class RestaurantOwnerService {
         return restaurant;
     }
 
-    // TODO accept restaurants with null menus
     public Restaurant addRestaurant(RestaurantComm restComm) {
 
         User user = new User(restComm.owner);

@@ -10,7 +10,6 @@ public class OrderDetails {
     private ArrayList<Meal> itemsList;
     private double deliveryFees;
     private String runnerName;
-    private String restaurntName;
     private double totalReceipt;
 
     public OrderDetails(Orders order) {
@@ -18,7 +17,6 @@ public class OrderDetails {
         itemsList = order.getMealsArray();
         deliveryFees = order.getRunner().getDeliveryFees();
         runnerName = order.getRunner().getName();
-        this.restaurntName = order.getRestaurant().getName();
         totalReceipt = deliveryFees + order.getTotalPrice();
     }
 
@@ -32,18 +30,6 @@ public class OrderDetails {
 
     public ArrayList<Meal> getItemsList() {
         return itemsList;
-    }
-
-    public String getRestaurntName() {
-        return restaurntName;
-    }
-
-    public void setRestaurntName(String restaurntName) {
-        this.restaurntName = restaurntName;
-    }
-
-    public void setTotalReceipt(double totalReceipt) {
-        this.totalReceipt = totalReceipt;
     }
 
     public void setItemsList(ArrayList<Meal> itemsList) {

@@ -1,7 +1,6 @@
 package app.Rest;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.ejb.*;
@@ -127,15 +126,9 @@ public class ApplicationApi {
         return runnerService.markOrder(id);
     }
 
-    @POST
-    @Path("addMenu")
-    public Restaurant createMenu(OrderComm orderComm) {
-        return ownerService.createMenu(orderComm);
-    }
-
-    @GET
-    @Path("getOrders")
-    public List<Orders> getOrders(int id) {
-        return customerService.getListOfOrders(id);
-    }
+    // @POST
+    // @Path("addMenu")
+    // public Restaurant createMenu(OrderComm orderComm){
+    // return ownerService.createMenu(orderComm);
+    // }
 }

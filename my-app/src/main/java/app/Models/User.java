@@ -2,14 +2,11 @@ package app.Models;
 
 import java.io.Serializable;
 
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import app.Util.Communication_Classes.UserComm;
@@ -24,29 +21,6 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
     private Restaurant restaurant;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public Set<Orders> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Orders> orders) {
-        this.orders = orders;
-    }
-
-    @OneToMany(mappedBy = "customer")
-    private Set<Orders> orders;
-
     public User(UserComm userComm) {
         this.name = userComm.name;
     }
@@ -55,10 +29,7 @@ public class User implements Serializable {
         this.name = name;
 
     }
-
-    public User() {
-    }
-
+    public User(){}
     public int getId() {
         return id;
     }
