@@ -13,8 +13,6 @@ import app.Models.*;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
 import app.Util.OrderDetails;
-import app.Util.Communication_Classes.MealComm;
-import app.Util.Communication_Classes.OrderComm;
 
 @Stateless
 public class CustomerService {

@@ -1,6 +1,7 @@
 package app.Models;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,7 +31,9 @@ public class Restaurant implements Serializable {
     private Set<Orders> orders;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Meal> menu ;
+    private Set<Meal> menu = new HashSet<Meal>() {
+
+    };
 
     public Restaurant() {
     }
@@ -54,7 +57,7 @@ public class Restaurant implements Serializable {
     }
 
     public Set<Meal> getMenu() {
-    return menu;
+        return menu;
     }
 
     public User getOwner() {

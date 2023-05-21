@@ -9,15 +9,13 @@ import app.Models.Restaurant;
 import app.Models.Runner;
 import app.Models.User;
 import app.Models.Meal;
-import app.Models.Orders;
 import app.Service.CustomerService;
 import app.Service.RestaurantOwnerService;
 import app.Service.RunnerService;
 import app.Service.UserService;
 import app.Util.OrderDetails;
 import app.Util.RestaurantReport;
-import app.Util.Communication_Classes.EditRestComm;
-import app.Util.Communication_Classes.OrderComm;
+import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Communication_Classes.UserComm;
@@ -50,10 +48,11 @@ public class ApplicationApi {
     }
 
     @PUT
-    @Path("editMenu")
-    public Restaurant editRestaurantMenu(EditRestComm editRestComm){
-        return ownerService.editRestaurantMenu(editRestComm);
+    @Path("{id}/editMenu")
+    public Restaurant editRestaurantMenu(@PathParam("id") int id, MenuWrapper menuWrapper){
+        return ownerService.editMenu(ownerService.removeFromMenu(id), menuWrapper);
     }
+
     @POST
     @Path("addUser")
     public User addUser(UserComm userComm) {
@@ -111,8 +110,8 @@ public class ApplicationApi {
     }
 
     @GET
-    @Path("getMenu")
-    public Set<Meal> getMenu(int id){
+    @Path("/{id}/getMenu")
+    public Set<Meal> getMenu(@PathParam("id") int id){
         return customerService.getMenu(id);
     }
 

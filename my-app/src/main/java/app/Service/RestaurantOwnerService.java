@@ -1,7 +1,6 @@
 package app.Service;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -12,8 +11,9 @@ import app.Models.Meal;
 import app.Models.Restaurant;
 import app.Models.User;
 import app.Util.RestaurantReport;
-import app.Util.Communication_Classes.EditRestComm;
+import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
+
 
 @Stateless
 public class RestaurantOwnerService {
@@ -41,31 +41,39 @@ public class RestaurantOwnerService {
 
         return restaurant;
     }
-
-    public Restaurant editRestaurantMenu(EditRestComm editRestComm) {
+    public Restaurant removeFromMenu(int restId){
         TypedQuery<Restaurant> query = em.createQuery(
             "select r from Restaurant r where r.id = ?1",
             Restaurant.class);
-        System.out.println(editRestComm.restId);
-        query.setParameter(1, editRestComm.restId);
+        query.setParameter(1, restId);
         Restaurant restaurant = query.getSingleResult();
 
-        if (restaurant == null)
-            return null;
-
-        Iterator<Meal> meals = restaurant.getMenu().iterator();
-        while(meals.hasNext()){
-            em.remove(meals.next());
+        Set<Meal> menu = restaurant.getMenu();
+        try{
+        for(int i = 0; i < menu.size(); i++){
+            Meal meal = (Meal)menu.toArray()[i];
+            menu.remove(meal);
+            meal.removeRestaurant();
+            em.merge(meal);
         }
+    }
+    catch(Exception e){
+        System.out.println("everything is fine :burning emoji:");
+    }
+        restaurant.setMenu(new HashSet<Meal>());
+        em.merge(restaurant);
+        return restaurant;
+    }
+    public Restaurant editMenu(Restaurant restaurant, MenuWrapper menuWrapper) {
+
         Set<Meal> menu = new HashSet<Meal>();
-        for(int i = 0 ; i < editRestComm.restComm.menu.size(); i++){
-            Meal meal = new Meal(editRestComm.restComm.menu.get(i));
-            meal.setRestaurant(restaurant);
+        for (int i = 0; i < menuWrapper.menu.size(); i++) {
+            Meal meal = new Meal(menuWrapper.menu.get(i));
             menu.add(meal);
             em.persist(meal);
         }
-
         restaurant.setMenu(menu);
+        System.out.print(((Meal)(restaurant.getMenu().toArray()[0])).getName());
         em.merge(restaurant);
         return restaurant;
     }
@@ -86,5 +94,4 @@ public class RestaurantOwnerService {
         List<Restaurant> restaurants = query.getResultList();
         return new RestaurantReport(restaurants.get(0));
     }
-
 }

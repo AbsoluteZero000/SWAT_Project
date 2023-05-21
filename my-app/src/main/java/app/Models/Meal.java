@@ -75,6 +75,9 @@ public class Meal implements Serializable {
         this.order.remove(order);
     }
 
+    public void removeRestaurant(){
+        restaurant = null;
+    }
 
 
 
