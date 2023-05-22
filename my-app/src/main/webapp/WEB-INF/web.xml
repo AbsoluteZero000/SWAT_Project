@@ -37,6 +37,7 @@
         <role-name>Runner</role-name>
     </security-role>
 
+
     <login-config>
         <auth-method>BASIC</auth-method>
         <realm-name>ApplicationRealm</realm-name>

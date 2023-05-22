@@ -36,7 +36,7 @@ public class UserService {
 
 
     public User findUserByName(String name){
-            TypedQuery<User> query = em.createQuery("select u from User where u.name = :username", User.class);
+            TypedQuery<User> query = em.createQuery("select u from User u where u.name = :username", User.class);
             query.setParameter("username", name);
         try{
             return query.getSingleResult();
@@ -45,7 +45,7 @@ public class UserService {
         }
     }
 
-
+    @PermitAll
     public User logIn(LoginWrapper loginWrapper){
         User user = findUserByName(loginWrapper.name);
         if(user == null)
@@ -56,13 +56,24 @@ public class UserService {
 
     @PermitAll
     public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
-        User user = findUserByName(loginWrapper.name);
-        if(user == null)
-            user = new User(loginWrapper.name);
-        Runtime.getRuntime().exec(String.format("cmd.exe /c  add-user.bat -a -u %s -p %s -g %s", loginWrapper.name, loginWrapper.password, loginWrapper.role));
 
-        return addUser(user);
 
+
+
+        String[] path = new String[] {
+            "cmd.exe", "/c", "add-user.bat",
+            "-a",
+            "-u", loginWrapper.name,
+            "-p", loginWrapper.password,
+            "-g", loginWrapper.role
+        };
+        ProcessBuilder processBuilder = new ProcessBuilder(path);
+        try {
+            Process process = processBuilder.start();
+        } catch (Exception e) {
+            return null;
+        }
+        return addUser(new User(loginWrapper));
     }
 
 }

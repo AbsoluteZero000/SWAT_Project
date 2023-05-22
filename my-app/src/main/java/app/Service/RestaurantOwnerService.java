@@ -1,9 +1,7 @@
 package app.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -77,10 +75,10 @@ public class RestaurantOwnerService {
     }
 
     public RestaurantReport getRestaurantReport(int id) {
-        TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r Join r.menu m WHERE r.id =:id",
-                Restaurant.class);
+        TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
+        Restaurant.class);
         query.setParameter("id", id);
-        List<Restaurant> restaurants = query.getResultList();
-        return new RestaurantReport(restaurants.get(0));
+        Restaurant restaurant = query.getSingleResult();
+        return new RestaurantReport(restaurant);
     }
 }

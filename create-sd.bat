@@ -1,1 +1,0 @@
-call "%JBOSS_HOME%/bin/add-user.bat" " -a " "-u Guest" "-p Guest" "-g Guest"
