@@ -7,11 +7,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.BadRequestException;
 
 import app.Models.User;
 import app.Util.Communication_Classes.LoginWrapper;
 import app.Util.Exceptions.UserAlreadyExistException;
-import app.Util.Exceptions.WrongCredentialsException;
 
 @Stateless
 @PermitAll
@@ -34,10 +34,11 @@ public class UserService {
         throw new UserAlreadyExistException();
     }
 
-    public User findUserByName(String name) {
-        TypedQuery<User> query = em.createQuery("select u from User u where u.name = :username", User.class);
-        query.setParameter("username", name);
-        try {
+
+    public User findUserByName(String name){
+            TypedQuery<User> query = em.createQuery("select u from User u where u.name = :username", User.class);
+            query.setParameter("username", name);
+        try{
             return query.getSingleResult();
         } catch (Exception e) {
             return null;
@@ -45,26 +46,26 @@ public class UserService {
     }
 
     @PermitAll
-    public User logIn(LoginWrapper loginWrapper) throws WrongCredentialsException {
-        TypedQuery<User> query = em
-                .createQuery("select u from User u where u.name = :username and u.password = :password", User.class);
-        query.setParameter("username", loginWrapper.name);
-        query.setParameter("password", loginWrapper.password);
-        List<User> user = query.getResultList();
-        if (user.isEmpty())
-            throw new WrongCredentialsException();
-        return user.get(0);
+    public User logIn(LoginWrapper loginWrapper){
+        User user = findUserByName(loginWrapper.name);
+        if(user == null)
+            throw new BadRequestException("user doesn't exist");
+
+        return user;
     }
 
     @PermitAll
-    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException {
+    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
+
+
+
 
         String[] path = new String[] {
-                "cmd.exe", "/c", "add-user.bat",
-                "-a",
-                "-u", loginWrapper.name,
-                "-p", loginWrapper.password,
-                "-g", loginWrapper.role
+            "cmd.exe", "/c", "add-user.bat",
+            "-a",
+            "-u", loginWrapper.name,
+            "-p", loginWrapper.password,
+            "-g", loginWrapper.role
         };
         ProcessBuilder processBuilder = new ProcessBuilder(path);
         try {
