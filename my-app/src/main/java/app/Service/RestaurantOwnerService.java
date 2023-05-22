@@ -31,6 +31,7 @@ public class RestaurantOwnerService {
 
         for (int i = 0; i < restComm.menu.size(); i++) {
             Meal meal = new Meal(restComm.menu.get(i));
+            meal.setRestaurant(restaurant);
             menu.add(meal);
         }
 
@@ -83,5 +84,3 @@ public class RestaurantOwnerService {
         return new RestaurantReport(restaurants.get(0));
     }
 }
-// TODO
-// cancel order, restaurant report, and mark order

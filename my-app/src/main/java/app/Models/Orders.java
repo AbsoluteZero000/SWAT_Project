@@ -22,10 +22,7 @@ public class Orders implements Serializable {
     private int id;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-    name = "ordertable",
-    joinColumns = @JoinColumn(name = "Order_id"),
-    inverseJoinColumns = @JoinColumn(name = "meal_id"))
+    @JoinTable(name = "ordertable", joinColumns = @JoinColumn(name = "Order_id"), inverseJoinColumns = @JoinColumn(name = "meal_id"))
     private Set<Meal> orderedMeals = new HashSet<Meal>();
 
     @Transient
@@ -47,9 +44,10 @@ public class Orders implements Serializable {
 
     private double calculateTotalPrice() {
         double sum = 0;
-        for (Meal meals: orderedMeals) {
+        for (Meal meals : orderedMeals) {
             sum += meals.getPrice();
         }
+        totalPrice = sum;
         return sum;
     }
 
@@ -62,8 +60,8 @@ public class Orders implements Serializable {
     }
 
     public double getTotalPrice() {
-        calculateTotalPrice();
-        return totalPrice;
+
+        return calculateTotalPrice();
     }
 
     public int getRestaurantId() {
@@ -71,7 +69,7 @@ public class Orders implements Serializable {
     }
 
     public void setRestaurant(Restaurant restaurant) {
-    this.restaurant = restaurant;
+        this.restaurant = restaurant;
     }
 
     public Runner getRunner() {
@@ -81,7 +79,6 @@ public class Orders implements Serializable {
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
-
 
     public void addItemsToArray(Meal meal) {
         orderedMeals.add(meal);

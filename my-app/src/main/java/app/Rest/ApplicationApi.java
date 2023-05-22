@@ -46,16 +46,17 @@ public class ApplicationApi {
     @Inject
     private HttpServletRequest request;
 
+    private User currentUser;
+
     @PostConstruct
     public void setUser() {
         try {
             Principal principal = request.getUserPrincipal();
             String login = principal.getName();
-            User user = userService.findUserByName(login);
-            System.out.println(user);
-            if (user == null) {
-                user = new User(login);
-                userService.addUser(user);
+            currentUser = userService.findUserByName(login);
+            if (currentUser == null) {
+                currentUser = new User(login);
+                userService.addUser(currentUser);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -70,21 +71,22 @@ public class ApplicationApi {
 
     @POST
     @Path("addUser")
-    public User addUser(LoginWrapper wrapper) {
+    public User addUser(LoginWrapper wrapper) throws UserAlreadyExistException {
         return userService.addUser(new User(wrapper));
     }
 
     @PermitAll
     @POST
     @Path("login")
-    public void login(LoginWrapper loginWrapper) {
+    public boolean login(LoginWrapper loginWrapper) {
+        return userService.login(loginWrapper.name, loginWrapper.password);
     }
 
     @PermitAll
     @POST
     @Path("signup")
-    public void signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException {
-        userService.signup(loginWrapper);
+    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException {
+        return userService.signup(loginWrapper);
     }
 
     @POST
@@ -156,7 +158,7 @@ public class ApplicationApi {
 
     @PUT
     @Path("markOrder")
-    public Orders markOrder(@QueryParam("id") int id) {
+    public OrderDetails markOrder(@QueryParam("id") int id) {
         return runnerService.markOrder(id);
     }
 }

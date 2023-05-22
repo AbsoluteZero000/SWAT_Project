@@ -1,6 +1,5 @@
 package app.Util;
 
-
 import app.Models.*;
 import app.Util.Enums.OrderStatus;
 
@@ -15,7 +14,7 @@ public class RestaurantReport {
         noOfCancelledOrders = 0;
         noOfCompeletedOrders = 0;
 
-        Orders[] orders = (Orders[])restaurant.getOrders().toArray();
+        Orders[] orders = (Orders[]) restaurant.getOrders().toArray();
         for (int i = 0; i < orders.length; i++) {
             if (orders[i].getOrderStatus() == OrderStatus.DELIVERED)
                 noOfCompeletedOrders++;

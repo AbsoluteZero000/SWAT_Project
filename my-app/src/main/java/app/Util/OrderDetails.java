@@ -16,8 +16,6 @@ public class OrderDetails {
     private double totalReceipt;
     private OrderStatus orderStatus;
 
-
-
     public OrderDetails(Orders order) {
         date = LocalDateTime.now();
         itemsList = order.getMealsArray();
@@ -62,6 +60,7 @@ public class OrderDetails {
     public double getTotalReceipt() {
         return totalReceipt;
     }
+
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
@@ -69,6 +68,7 @@ public class OrderDetails {
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
+
     public ArrayList<Object> getReceipt() {
         ArrayList<Object> receipt = new ArrayList<>();
         receipt.add(date);

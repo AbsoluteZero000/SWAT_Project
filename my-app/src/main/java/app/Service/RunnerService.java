@@ -1,15 +1,17 @@
 package app.Service;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import app.Models.*;
+import app.Util.OrderDetails;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
-import app.Util.Enums.Status;
+import app.Util.Enums.*;
 
 @Stateless
 @PermitAll
@@ -17,7 +19,7 @@ public class RunnerService {
     @PersistenceContext
     private EntityManager em;
 
-    public Orders markOrder(int id) {
+    public OrderDetails markOrder(int id) {
         TypedQuery<Orders> query = em.createQuery("Select o from Orders o where o.id =?1", Orders.class);
         query.setParameter(1, id);
         Orders order = query.getSingleResult();
@@ -31,7 +33,7 @@ public class RunnerService {
         em.merge(order);
         em.merge(runner);
 
-        return order;
+        return new OrderDetails(order);
     }
 
     public Runner addRunner(RunnerComm runnerComm) {

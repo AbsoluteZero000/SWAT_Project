@@ -24,8 +24,6 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
-
     @OneToOne(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Restaurant restaurant;
 
@@ -40,10 +38,14 @@ public class User implements Serializable {
         this.name = name;
 
     }
-    public User(){}
+
+    public User() {
+    }
+
     public int getId() {
         return id;
     }
+
     public String getPassword() {
         return password;
     }
@@ -59,6 +61,7 @@ public class User implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
+
     public String getName() {
         return name;
     }
