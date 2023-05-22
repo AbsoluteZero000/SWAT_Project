@@ -1,6 +1,6 @@
 package app.Util.Communication_Classes;
 
 public class RunnerComm {
-    public String name;
+    public LoginWrapper loginWrapper;
     public int deliveryFees;
 }

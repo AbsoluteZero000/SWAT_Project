@@ -1,5 +1,6 @@
 package app.Service;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,9 +10,10 @@ import app.Models.*;
 import app.Util.OrderDetails;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
-import app.Util.Enums.Status;
+import app.Util.Enums.*;
 
 @Stateless
+@PermitAll
 public class RunnerService {
     @PersistenceContext
     private EntityManager em;
@@ -44,9 +46,11 @@ public class RunnerService {
     }
 
     public int getNumberOfTrips(int id) {
-    TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED", Orders.class);
-    query.setParameter(1, id);
-    List<Orders> list = query.getResultList();
-    return list.size();
+        TypedQuery<Orders> query = em.createQuery(
+                "SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED",
+                Orders.class);
+        query.setParameter(1, id);
+        List<Orders> list = query.getResultList();
+        return list.size();
     }
 }

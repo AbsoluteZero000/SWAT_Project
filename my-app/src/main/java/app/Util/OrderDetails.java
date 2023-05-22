@@ -6,6 +6,7 @@ import java.util.Set;
 
 import app.Models.Meal;
 import app.Models.Orders;
+import app.Util.Enums.OrderStatus;
 
 public class OrderDetails {
     private LocalDateTime date;
@@ -13,6 +14,7 @@ public class OrderDetails {
     private double deliveryFees;
     private String runnerName;
     private double totalReceipt;
+    private OrderStatus orderStatus;
 
     public OrderDetails(Orders order) {
         date = LocalDateTime.now();
@@ -20,6 +22,7 @@ public class OrderDetails {
         deliveryFees = order.getRunner().getDeliveryFees();
         runnerName = order.getRunner().getName();
         totalReceipt = deliveryFees + order.getTotalPrice();
+        orderStatus = order.getOrderStatus();
     }
 
     public LocalDateTime getDate() {
@@ -56,6 +59,14 @@ public class OrderDetails {
 
     public double getTotalReceipt() {
         return totalReceipt;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public ArrayList<Object> getReceipt() {
