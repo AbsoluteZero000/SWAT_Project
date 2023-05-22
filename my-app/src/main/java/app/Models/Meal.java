@@ -28,7 +28,9 @@ public class Meal implements Serializable {
     @ManyToMany(mappedBy = "orderedMeals")
     Set<Orders> order;
 
-    public Meal(){}
+    public Meal() {
+    }
+
     public Meal(MealComm mealComm) {
         this.name = mealComm.name;
         this.price = mealComm.price;
@@ -55,7 +57,7 @@ public class Meal implements Serializable {
         this.id = id;
     }
 
-    public void addOrderTo(Orders order){
+    public void addOrderTo(Orders order) {
         this.order.add(order);
     }
 
@@ -63,7 +65,7 @@ public class Meal implements Serializable {
         this.price = price;
     }
 
-    public void setRestaurant(Restaurant res){
+    public void setRestaurant(Restaurant res) {
         this.restaurant = res;
     }
 
@@ -71,15 +73,12 @@ public class Meal implements Serializable {
         return this.price;
     }
 
-    public void removeOrder(Orders order){
+    public void removeOrder(Orders order) {
         this.order.remove(order);
     }
 
-    public void removeRestaurant(){
+    public void removeRestaurant() {
         restaurant = null;
     }
-
-
-
 
 }

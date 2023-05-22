@@ -77,10 +77,10 @@ public class Restaurant implements Serializable {
     }
 
     public void setMenu(Set<Meal> menu) {
-    this.menu = menu;
+        this.menu = menu;
     }
 
-    public void addItemsToMenu(Meal meal){
+    public void addItemsToMenu(Meal meal) {
         menu.add(meal);
     }
 
@@ -88,9 +88,10 @@ public class Restaurant implements Serializable {
         this.owner = owner;
     }
 
-    public void addOrder(Orders order){
+    public void addOrder(Orders order) {
         this.orders.add(order);
     }
+
     public void setOrders(Set<Orders> orders) {
         this.orders = orders;
     }

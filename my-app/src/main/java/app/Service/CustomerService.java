@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import app.Util.Exceptions.OrderDeliveredException;
 import app.Models.*;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
@@ -25,26 +26,24 @@ public class CustomerService {
     public CustomerService() {
     }
 
-
     public OrderDetails createOrder(int restId, ArrayList<Integer> ids) {
         Orders order = new Orders();
         TypedQuery<Meal> query3 = em.createQuery(
-            "Select m from Meal m  where m.id =?1",
-            Meal.class);
+                "Select m from Meal m  where m.id =?1",
+                Meal.class);
         for (int i = 0; i < ids.size(); i++) {
-            query3.setParameter(1,ids.get(i));
+            query3.setParameter(1, ids.get(i));
             Meal meal = query3.getSingleResult();
-            if(meal == null)
+            if (meal == null)
                 throw new NullPointerException("meal doesn't exist");
 
             order.addItemsToArray(meal);
             System.out.println(meal.toString());
         }
 
-
         TypedQuery<Restaurant> query2 = em.createQuery(
-        "Select r from Restaurant r where r.id =?1",
-        Restaurant.class);
+                "Select r from Restaurant r where r.id =?1",
+                Restaurant.class);
         query2.setParameter(1, restId);
         Restaurant restaurant = query2.getSingleResult();
 
@@ -70,17 +69,18 @@ public class CustomerService {
         return new OrderDetails(order);
     }
 
-    public OrderDetails editOrder(int orderId, ArrayList<Integer> ids) throws OrderCancelledException, NullPointerException, OrderDeliveredException {
+    public OrderDetails editOrder(int orderId, ArrayList<Integer> ids)
+            throws OrderCancelledException, NullPointerException, OrderDeliveredException {
         Set<Meal> meals = new HashSet<Meal>();
 
         TypedQuery<Meal> query3 = em.createQuery(
-            "Select m from Meal m  where m.id =?1",
-            Meal.class);
+                "Select m from Meal m  where m.id =?1",
+                Meal.class);
         for (int i = 0; i < ids.size(); i++) {
-            query3.setParameter(1,ids.get(i));
+            query3.setParameter(1, ids.get(i));
             Meal meal = query3.getSingleResult();
 
-            if(meal == null)
+            if (meal == null)
                 throw new NullPointerException("meal doesn't exist");
             meals.add(meal);
         }
@@ -93,10 +93,9 @@ public class CustomerService {
         if (order == null)
             throw new NullPointerException("the order you have entered the id of doesn't exist");
 
-
         if (order.getOrderStatus() == OrderStatus.CANCELED)
             throw new OrderCancelledException();
-        if(order.getOrderStatus() == OrderStatus.DELIVERED)
+        if (order.getOrderStatus() == OrderStatus.DELIVERED)
             throw new OrderDeliveredException();
 
         order.setMealList(meals);
@@ -105,7 +104,7 @@ public class CustomerService {
 
     }
 
-    public Orders cancelOrder(int id){
+    public Orders cancelOrder(int id) {
         TypedQuery<Orders> query = em.createQuery(
                 "Select o from Orders o where o.id =?1",
                 Orders.class);
@@ -129,9 +128,9 @@ public class CustomerService {
         return query.getSingleResult();
     }
 
-    public Set<Meal> getMenu(int id){
+    public Set<Meal> getMenu(int id) {
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
-            Restaurant.class);
+                Restaurant.class);
         query.setParameter("id", id);
         Restaurant restaurant = query.getSingleResult();
         return restaurant.getMenu();

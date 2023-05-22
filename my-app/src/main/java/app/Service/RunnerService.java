@@ -10,7 +10,7 @@ import app.Models.*;
 import app.Util.OrderDetails;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
-import app.Util.Enums.Status;
+import app.Util.Enums.*;
 
 @Stateless
 @PermitAll
@@ -18,7 +18,7 @@ public class RunnerService {
     @PersistenceContext
     private EntityManager em;
 
-    public Orders markOrder(int id) {
+    public OrderDetails markOrder(int id) {
         TypedQuery<Orders> query = em.createQuery("Select o from Orders o where o.id =?1", Orders.class);
         query.setParameter(1, id);
         Orders order = query.getSingleResult();
@@ -32,7 +32,7 @@ public class RunnerService {
         em.merge(order);
         em.merge(runner);
 
-        return order;
+        return new OrderDetails(order);
     }
 
     public Runner addRunner(RunnerComm runnerComm) {
@@ -46,7 +46,9 @@ public class RunnerService {
     }
 
     public int getNumberOfTrips(int id) {
-        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED", Orders.class);
+        TypedQuery<Orders> query = em.createQuery(
+                "SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED",
+                Orders.class);
         query.setParameter(1, id);
         List<Orders> list = query.getResultList();
         return list.size();

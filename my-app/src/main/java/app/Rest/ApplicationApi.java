@@ -31,7 +31,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.QueryParam;
 
-
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
@@ -51,43 +50,44 @@ public class ApplicationApi {
 
     @PostConstruct
     public void setUser(){
-        try{
-            Principal principal = request.getUserPrincipal();
-            String login = principal.getName();
-            currentUser = userService.findUserByName(login);
-            if(currentUser == null){
-                currentUser = new User(login);
-                userService.addUser(currentUser);
+        try{Principal principal = request.getUserPrincipal();
+        String login = principal.getName();
+        currentUser = userService.findUserByName(login);
+        if(currentUser == null){
+            currentUser = new User(login);
+            userService.addUser(currentUser);
         }}
         catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-
     @PUT
     @Path("{id}/editMenu")
-    public Restaurant editRestaurantMenu(@PathParam("id") int id, MenuWrapper menuWrapper){
+    public Restaurant editRestaurantMenu(@PathParam("id") int id, MenuWrapper menuWrapper) {
         return ownerService.editMenu(id, menuWrapper);
     }
 
     @POST
     @Path("addUser")
-    public User addUser(LoginWrapper wrapper) {
+    public User addUser(LoginWrapper wrapper) throws UserAlreadyExistException {
         return userService.addUser(new User(wrapper));
     }
 
     @PermitAll
     @POST
     @Path("login")
-    public void login(LoginWrapper loginWrapper) {
+    public User login(LoginWrapper loginWrapper) {
+        currentUser = userService.logIn(loginWrapper);
+        return currentUser;
     }
 
     @PermitAll
     @POST
     @Path("signup")
     public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
-        return userService.signup(loginWrapper);
+        currentUser = userService.signup(loginWrapper);
+        return currentUser;
     }
 
     @POST
@@ -104,21 +104,22 @@ public class ApplicationApi {
 
     @PUT
     @Path("{id}/editOrder")
-    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids) throws NullPointerException, OrderCancelledException, OrderDeliveredException{
+    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids)
+            throws NullPointerException, OrderCancelledException, OrderDeliveredException {
         return customerService.editOrder(id, ids.ids);
     }
 
     @PUT
     @Path("{id}/cancelOrder")
-    public Orders cancelOrder(@PathParam("id") int id){
+    public Orders cancelOrder(@PathParam("id") int id) {
         return customerService.cancelOrder(id);
     }
+
     @GET
     @Path("{id}/getOrder")
-    public OrderDetails getOrder(@PathParam("id") int id){
+    public OrderDetails getOrder(@PathParam("id") int id) {
         return new OrderDetails(customerService.getOrder(id));
     }
-
 
     @POST
     @Path("createRestaurant")
@@ -134,31 +135,31 @@ public class ApplicationApi {
 
     @GET
     @Path("getRestaurantReport")
-    public RestaurantReport getRestaurantReport(int id){
+    public RestaurantReport getRestaurantReport(@QueryParam("id") int id) {
         return ownerService.getRestaurantReport(id);
     }
 
     @GET
     @Path("getAllRestaurants")
-    public ArrayList<Restaurant> getAllRestaurants(){
+    public ArrayList<Restaurant> getAllRestaurants() {
         return customerService.getAllRestaurants();
     }
 
     @GET
     @Path("/{id}/getMenu")
-    public Set<Meal> getMenu(@PathParam("id") int id){
+    public Set<Meal> getMenu(@PathParam("id") int id) {
         return customerService.getMenu(id);
     }
 
     @GET
     @Path("getNumberOfTrips")
-    public int getNumberOfTrips(@QueryParam("id")int id){
+    public int getNumberOfTrips(@QueryParam("id") int id) {
         return runnerService.getNumberOfTrips(id);
     }
 
     @PUT
     @Path("markOrder")
-    public Orders markOrder(@QueryParam("id")int id){
+    public OrderDetails markOrder(@QueryParam("id") int id) {
         return runnerService.markOrder(id);
     }
 }

@@ -1,6 +1,7 @@
 package app.Service;
 
 import java.io.IOException;
+import java.util.List;
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import app.Util.Exceptions.UserAlreadyExistException;
 
 @Stateless
 @PermitAll
+
 public class UserService {
     @PersistenceContext
     private EntityManager em;
@@ -21,19 +23,24 @@ public class UserService {
     public UserService() {
     }
 
-    public User addUser(User user) {
-        em.persist(user);
-        return user;
+    public User addUser(User user) throws UserAlreadyExistException {
+        TypedQuery<User> query = em.createQuery("select u from User u where u.name = :username", User.class);
+        query.setParameter("username", user.getName());
+        List<User> u = query.getResultList();
+        if (u.isEmpty()) {
+            em.persist(user);
+            return user;
+        }
+        throw new UserAlreadyExistException();
     }
 
 
     public User findUserByName(String name){
-            TypedQuery<User> query = em.createQuery("select u from User u where u.name = :username", User.class);
+            TypedQuery<User> query = em.createQuery("select u from User where u.name = :username", User.class);
             query.setParameter("username", name);
         try{
             return query.getSingleResult();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -46,11 +53,14 @@ public class UserService {
 
         return user;
     }
+
+    @PermitAll
     public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
         User user = findUserByName(loginWrapper.name);
         if(user == null)
-            user = new User(loginWrapper);
-        Runtime.getRuntime().exec(String.format("cmd.exe /c add-user.bat -a -u %s -p %s -g %s", loginWrapper.name, loginWrapper.password, loginWrapper.role));
+            user = new User(loginWrapper.name);
+        Runtime.getRuntime().exec(String.format("cmd.exe /c  add-user.bat -a -u %s -p %s -g %s", loginWrapper.name, loginWrapper.password, loginWrapper.role));
+
         return addUser(user);
 
     }
