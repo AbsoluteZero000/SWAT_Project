@@ -27,6 +27,8 @@ import app.Util.Communication_Classes.idsWrapper;
 import app.Util.Exceptions.OrderCancelledException;
 import app.Util.Exceptions.OrderDeliveredException;
 import app.Util.Exceptions.UserAlreadyExistException;
+import app.Util.Exceptions.WrongCredentialsException;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.QueryParam;
@@ -77,7 +79,7 @@ public class ApplicationApi {
     @PermitAll
     @POST
     @Path("login")
-    public User login(LoginWrapper loginWrapper) {
+    public User login(LoginWrapper loginWrapper) throws WrongCredentialsException {
         currentUser = userService.logIn(loginWrapper);
         return currentUser;
     }
@@ -136,7 +138,7 @@ public class ApplicationApi {
     @GET
     @Path("getRestaurantReport")
     public RestaurantReport getRestaurantReport(@QueryParam("id") int id) {
-        return ownerService.getRestaurantReport(id);
+        return new RestaurantReport(ownerService.getRestaurantDetails(id));
     }
 
     @GET

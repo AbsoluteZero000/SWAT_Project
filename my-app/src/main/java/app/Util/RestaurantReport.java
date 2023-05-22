@@ -1,5 +1,7 @@
 package app.Util;
 
+import java.util.Set;
+
 import app.Models.*;
 import app.Util.Enums.OrderStatus;
 
@@ -14,14 +16,14 @@ public class RestaurantReport {
         noOfCancelledOrders = 0;
         noOfCompeletedOrders = 0;
 
-        Orders[] orders = (Orders[]) restaurant.getOrders().toArray();
-        for (int i = 0; i < orders.length; i++) {
-            if (orders[i].getOrderStatus() == OrderStatus.DELIVERED)
+        Set<Orders> orders = restaurant.getOrders();
+        for (Orders order: orders) {
+            if (order.getOrderStatus() == OrderStatus.DELIVERED)
                 noOfCompeletedOrders++;
-            else if (orders[i].getOrderStatus() == OrderStatus.CANCELED)
+            else if (order.getOrderStatus() == OrderStatus.CANCELED)
                 noOfCancelledOrders++;
 
-            earnedAmount += orders[i].getTotalPrice();
+            earnedAmount += order.getTotalPrice();
         }
     }
 
