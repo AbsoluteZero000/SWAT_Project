@@ -34,7 +34,7 @@ public class Runner extends User {
     }
 
     public Runner(RunnerComm runnerComm) {
-        super(runnerComm.name);
+        super(runnerComm.loginWrapper);
         deliveryFees = runnerComm.deliveryFees;
         this.status = Status.AVAILABLE;
     }

@@ -1,14 +1,18 @@
 package app.Rest;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
-import javax.ejb.*;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import app.Models.Restaurant;
 import app.Models.Runner;
 import app.Models.User;
 import app.Models.Meal;
+import app.Models.Orders;
 import app.Service.CustomerService;
 import app.Service.RestaurantOwnerService;
 import app.Service.RunnerService;
@@ -19,14 +23,15 @@ import app.Util.Communication_Classes.LoginWrapper;
 import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
 import app.Util.Communication_Classes.RunnerComm;
-import app.Util.Communication_Classes.UserComm;
 import app.Util.Communication_Classes.idsWrapper;
 import app.Util.Exceptions.OrderCancelledException;
+import app.Util.Exceptions.OrderDeliveredException;
+import app.Util.Exceptions.UserAlreadyExistException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.QueryParam;
 
-@Stateless
+
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
@@ -39,17 +44,35 @@ public class ApplicationApi {
     private CustomerService customerService = new CustomerService();
     @Inject
     private RestaurantOwnerService ownerService = new RestaurantOwnerService();
+    @Inject
+    private HttpServletRequest request;
+
+    @PostConstruct
+    public void setUser(){
+        try{Principal principal = request.getUserPrincipal();
+        String login = principal.getName();
+        User user = userService.findUserByName(login);
+        System.out.println(user);
+        if(user == null){
+            user = new User(login);
+            userService.addUser(user);
+        }}
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     @PUT
     @Path("{id}/editMenu")
     public Restaurant editRestaurantMenu(@PathParam("id") int id, MenuWrapper menuWrapper){
-        return ownerService.editMenu(ownerService.removeFromMenu(id), menuWrapper);
+        return ownerService.editMenu(id, menuWrapper);
     }
 
     @POST
     @Path("addUser")
-    public User addUser(UserComm userComm) {
-        return userService.addUser(new User(userComm.name));
+    public User addUser(LoginWrapper wrapper) {
+        return userService.addUser(new User(wrapper));
     }
 
     @PermitAll
@@ -61,7 +84,8 @@ public class ApplicationApi {
     @PermitAll
     @POST
     @Path("signup")
-    public void signup(LoginWrapper loginWrapper){
+    public void signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
+        userService.signup(loginWrapper);
     }
 
     @POST
@@ -78,13 +102,18 @@ public class ApplicationApi {
 
     @PUT
     @Path("{id}/editOrder")
-    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids) throws NullPointerException, OrderCancelledException{
+    public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids) throws NullPointerException, OrderCancelledException, OrderDeliveredException{
         return customerService.editOrder(id, ids.ids);
     }
 
+    @PUT
+    @Path("{id}/cancelOrder")
+    public Orders cancelOrder(@PathParam("id") int id){
+        return customerService.cancelOrder(id);
+    }
     @GET
-    @Path("getOrder")
-    public OrderDetails getOrder(@QueryParam("id") int id){
+    @Path("{id}/getOrder")
+    public OrderDetails getOrder(@PathParam("id") int id){
         return new OrderDetails(customerService.getOrder(id));
     }
 
@@ -127,7 +156,7 @@ public class ApplicationApi {
 
     @PUT
     @Path("markOrder")
-    public OrderDetails markOrder(@QueryParam("id")int id){
+    public Orders markOrder(@QueryParam("id")int id){
         return runnerService.markOrder(id);
     }
 }

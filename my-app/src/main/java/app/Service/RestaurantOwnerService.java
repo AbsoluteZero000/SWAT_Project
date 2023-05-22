@@ -16,8 +16,9 @@ import app.Util.RestaurantReport;
 import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
 
-@PermitAll
+
 @Stateless
+@PermitAll
 public class RestaurantOwnerService {
     @PersistenceContext
     private EntityManager em;
@@ -31,9 +32,7 @@ public class RestaurantOwnerService {
 
         for(int i = 0 ; i < restComm.menu.size(); i++){
             Meal meal = new Meal(restComm.menu.get(i));
-            meal.setRestaurant(restaurant);
             menu.add(meal);
-            em.persist(meal);
         }
 
         restaurant.setMenu(menu);
@@ -43,45 +42,34 @@ public class RestaurantOwnerService {
 
         return restaurant;
     }
-    public Restaurant removeFromMenu(int restId){
+
+    public Restaurant editMenu(int id, MenuWrapper menuWrapper) {
         TypedQuery<Restaurant> query = em.createQuery(
             "select r from Restaurant r where r.id = ?1",
             Restaurant.class);
-        query.setParameter(1, restId);
+        query.setParameter(1, id);
         Restaurant restaurant = query.getSingleResult();
-
-        Set<Meal> menu = restaurant.getMenu();
-        try{
-        for(int i = 0; i < menu.size(); i++){
-            Meal meal = (Meal)menu.toArray()[i];
-            menu.remove(meal);
-            meal.removeRestaurant();
-            em.merge(meal);
-        }
-    }
-    catch(Exception e){
-        System.out.println("everything is fine :burning emoji:");
-    }
-        restaurant.setMenu(new HashSet<Meal>());
-        em.merge(restaurant);
-        return restaurant;
-    }
-    public Restaurant editMenu(Restaurant restaurant, MenuWrapper menuWrapper) {
-
         Set<Meal> menu = new HashSet<Meal>();
+
+        TypedQuery<Meal> query2 = em.createQuery("select m from Meal m where m.name = ?1",Meal.class);
         for (int i = 0; i < menuWrapper.menu.size(); i++) {
-            Meal meal = new Meal(menuWrapper.menu.get(i));
-            menu.add(meal);
+            query2.setParameter(1, menuWrapper.menu.get(i).name);
+            Meal meal;
+            try{
+                meal = query2.getSingleResult();
+            }
+            catch(Exception e){
+            meal = new Meal(menuWrapper.menu.get(i));
             em.persist(meal);
+            }
+            menu.add(meal);
         }
         restaurant.setMenu(menu);
-        System.out.print(((Meal)(restaurant.getMenu().toArray()[0])).getName());
         em.merge(restaurant);
         return restaurant;
     }
 
     public Restaurant getRestaurantDetails(int id) {
-        System.out.println("hey");
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
             Restaurant.class);
         query.setParameter("id", id);

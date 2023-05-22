@@ -1,5 +1,6 @@
 package app.Service;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,11 +13,12 @@ import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
 
 @Stateless
+@PermitAll
 public class RunnerService {
     @PersistenceContext
     private EntityManager em;
 
-    public OrderDetails markOrder(int id) {
+    public Orders markOrder(int id) {
         TypedQuery<Orders> query = em.createQuery("Select o from Orders o where o.id =?1", Orders.class);
         query.setParameter(1, id);
         Orders order = query.getSingleResult();
@@ -30,7 +32,7 @@ public class RunnerService {
         em.merge(order);
         em.merge(runner);
 
-        return new OrderDetails(order);
+        return order;
     }
 
     public Runner addRunner(RunnerComm runnerComm) {
@@ -44,9 +46,9 @@ public class RunnerService {
     }
 
     public int getNumberOfTrips(int id) {
-    TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED", Orders.class);
-    query.setParameter(1, id);
-    List<Orders> list = query.getResultList();
-    return list.size();
+        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED", Orders.class);
+        query.setParameter(1, id);
+        List<Orders> list = query.getResultList();
+        return list.size();
     }
 }
