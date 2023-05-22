@@ -26,32 +26,34 @@ User can have 3 different roles Customer, RestaurantOwner, Runner roles Restaura
 
 TBD
 
-|         Title         | Method | Link                                                                 |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Create Resturant Menu |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/createRestaurant`        |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Add New Runner        |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/addRunner`               |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Get Number Of Trips   |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getNumberOfTrips?id=2`   |
-| :-------------------: | :----: |--------------------------------------------                          |
-| Get Restaurant Details|  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getRestaurantDetails?id=1`|
-| :-------------------: | :----: | --------------------------------------------                         |
-| Get All Restaurants   |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getAllRestaurants`       |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Get Restaurant Report |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getRestaurantReport?id=1`|
-| :-------------------: | :----: | --------------------------------------------                         |
-| Edit Menu             |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/editMenu`              |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Create New Order      |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/1/createOrder`           |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Edit An Order         |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/editOrder`             |
-| :-------------------: | :----: | --------------------------------------------                         |
-| get Menu              |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/{id}/getMenu`            |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Mark Order As Done    |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/markOrder?id=1`          |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Cancel Order          |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/cancelOrder`           |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Get Order Details     |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/1/getOrder`              |
-| :-------------------: | :----: | --------------------------------------------                         |
-| Sign Up New User      |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/signup`                  |
+|         Title          | Method | Link                                                                   |
+| :--------------------: | :----: | ---------------------------------------------------------------------- |
+| Create Resturant Menu  |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/createRestaurant`          |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|     Add New Runner     |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/addRunner`                 |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|  Get Number Of Trips   |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getNumberOfTrips?id=2`     |
+| :-------------------:  | :----: | --------------------------------------------                           |
+| Get Restaurant Details |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getRestaurantDetails?id=1` |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|  Get All Restaurants   |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getAllRestaurants`         |
+| :-------------------:  | :----: | --------------------------------------------                           |
+| Get Restaurant Report  |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/getRestaurantReport?id=1`  |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|       Edit Menu        |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/editMenu`                |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|    Create New Order    |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/1/createOrder`             |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|     Edit An Order      |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/editOrder`               |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|        get Menu        |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/{id}/getMenu`              |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|   Mark Order As Done   |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/markOrder?id=1`            |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|      Cancel Order      |  PUT   | `http://localhost:8080/SWAT_Project-1.0/api/1/cancelOrder`             |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|   Get Order Details    |  GET   | `http://localhost:8080/SWAT_Project-1.0/api/1/getOrder`                |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|    Sign Up New User    |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/signup`                    |
+| :-------------------:  | :----: | --------------------------------------------                           |
+|      Sign In User      |  POST  | `http://localhost:8080/SWAT_Project-1.0/api/login`                     |

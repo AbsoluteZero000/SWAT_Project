@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import app.Models.Restaurant;
@@ -27,6 +28,8 @@ import app.Util.Communication_Classes.idsWrapper;
 import app.Util.Exceptions.OrderCancelledException;
 import app.Util.Exceptions.OrderDeliveredException;
 import app.Util.Exceptions.UserAlreadyExistException;
+import app.Util.Exceptions.WrongCredentialsException;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.QueryParam;
@@ -49,21 +52,23 @@ public class ApplicationApi {
     private User currentUser;
 
     @PostConstruct
-    public void setUser(){
-        try{Principal principal = request.getUserPrincipal();
-        String login = principal.getName();
-        currentUser = userService.findUserByName(login);
-        if(currentUser == null){
-            currentUser = new User(login);
-            userService.addUser(currentUser);
-        }}
-        catch(Exception e){
+    public void setUser() {
+        try {
+            Principal principal = request.getUserPrincipal();
+            String login = principal.getName();
+            currentUser = userService.findUserByName(login);
+            if (currentUser == null) {
+                currentUser = new User(login);
+                userService.addUser(currentUser);
+            }
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     @PUT
     @Path("{id}/editMenu")
+    @RolesAllowed("RestaurantOwner")
     public Restaurant editRestaurantMenu(@PathParam("id") int id, MenuWrapper menuWrapper) {
         return ownerService.editMenu(id, menuWrapper);
     }
@@ -77,7 +82,7 @@ public class ApplicationApi {
     @PermitAll
     @POST
     @Path("login")
-    public User login(LoginWrapper loginWrapper) {
+    public User login(LoginWrapper loginWrapper) throws WrongCredentialsException {
         currentUser = userService.logIn(loginWrapper);
         return currentUser;
     }
@@ -85,25 +90,28 @@ public class ApplicationApi {
     @PermitAll
     @POST
     @Path("signup")
-    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
+    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException {
         currentUser = userService.signup(loginWrapper);
         return currentUser;
     }
 
     @POST
     @Path("addRunner")
+    @RolesAllowed("Runner")
     public Runner addRunner(RunnerComm runner) {
         return runnerService.addRunner(runner);
     }
 
     @POST
     @Path("{id}/createOrder")
+    @RolesAllowed("Customer")
     public OrderDetails createOrder(@PathParam("id") int id, idsWrapper ids) {
         return customerService.createOrder(id, ids.ids);
     }
 
     @PUT
     @Path("{id}/editOrder")
+    @RolesAllowed("Customer")
     public OrderDetails editOrder(@PathParam("id") int id, idsWrapper ids)
             throws NullPointerException, OrderCancelledException, OrderDeliveredException {
         return customerService.editOrder(id, ids.ids);
@@ -111,54 +119,63 @@ public class ApplicationApi {
 
     @PUT
     @Path("{id}/cancelOrder")
+    @RolesAllowed("Customer")
     public Orders cancelOrder(@PathParam("id") int id) {
         return customerService.cancelOrder(id);
     }
 
     @GET
     @Path("{id}/getOrder")
+    @RolesAllowed("Customer")
     public OrderDetails getOrder(@PathParam("id") int id) {
         return new OrderDetails(customerService.getOrder(id));
     }
 
     @POST
     @Path("createRestaurant")
+    @RolesAllowed("RestaurantOwner")
     public Restaurant createRestaurant(RestaurantComm restComm) {
         return ownerService.addRestaurant(restComm);
     }
 
     @GET
     @Path("getRestaurantDetails")
+    @RolesAllowed("RestaurantOwner")
     public Restaurant getRestaurantDetails(@QueryParam("id") int id) {
         return ownerService.getRestaurantDetails(id);
     }
 
     @GET
     @Path("getRestaurantReport")
+    @RolesAllowed("RestaurantOwner")
     public RestaurantReport getRestaurantReport(@QueryParam("id") int id) {
         return ownerService.getRestaurantReport(id);
     }
 
     @GET
     @Path("getAllRestaurants")
+    @RolesAllowed("Customer")
     public ArrayList<Restaurant> getAllRestaurants() {
         return customerService.getAllRestaurants();
     }
 
     @GET
     @Path("/{id}/getMenu")
+    @RolesAllowed("Customer")
     public Set<Meal> getMenu(@PathParam("id") int id) {
         return customerService.getMenu(id);
     }
 
     @GET
     @Path("getNumberOfTrips")
+    @RolesAllowed("Runner")
     public int getNumberOfTrips(@QueryParam("id") int id) {
         return runnerService.getNumberOfTrips(id);
     }
 
     @PUT
     @Path("markOrder")
+    @RolesAllowed("Runner")
     public OrderDetails markOrder(@QueryParam("id") int id) {
         return runnerService.markOrder(id);
     }
