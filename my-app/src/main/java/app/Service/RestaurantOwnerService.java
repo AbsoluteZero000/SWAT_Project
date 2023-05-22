@@ -65,7 +65,7 @@ public class RestaurantOwnerService {
             menu.add(meal);
         }
         restaurant.setMenu(menu);
-        em.merge(restaurant);
+        em.persist(restaurant);
         return restaurant;
     }
 
