@@ -16,7 +16,6 @@ import app.Util.RestaurantReport;
 import app.Util.Communication_Classes.MenuWrapper;
 import app.Util.Communication_Classes.RestaurantComm;
 
-
 @Stateless
 @PermitAll
 public class RestaurantOwnerService {
@@ -30,7 +29,7 @@ public class RestaurantOwnerService {
         restaurant.setOwner(user);
         Set<Meal> menu = new HashSet<Meal>();
 
-        for(int i = 0 ; i < restComm.menu.size(); i++){
+        for (int i = 0; i < restComm.menu.size(); i++) {
             Meal meal = new Meal(restComm.menu.get(i));
             menu.add(meal);
         }
@@ -45,22 +44,21 @@ public class RestaurantOwnerService {
 
     public Restaurant editMenu(int id, MenuWrapper menuWrapper) {
         TypedQuery<Restaurant> query = em.createQuery(
-            "select r from Restaurant r where r.id = ?1",
-            Restaurant.class);
+                "select r from Restaurant r where r.id = ?1",
+                Restaurant.class);
         query.setParameter(1, id);
         Restaurant restaurant = query.getSingleResult();
         Set<Meal> menu = new HashSet<Meal>();
 
-        TypedQuery<Meal> query2 = em.createQuery("select m from Meal m where m.name = ?1",Meal.class);
+        TypedQuery<Meal> query2 = em.createQuery("select m from Meal m where m.name = ?1", Meal.class);
         for (int i = 0; i < menuWrapper.menu.size(); i++) {
             query2.setParameter(1, menuWrapper.menu.get(i).name);
             Meal meal;
-            try{
+            try {
                 meal = query2.getSingleResult();
-            }
-            catch(Exception e){
-            meal = new Meal(menuWrapper.menu.get(i));
-            em.persist(meal);
+            } catch (Exception e) {
+                meal = new Meal(menuWrapper.menu.get(i));
+                em.persist(meal);
             }
             menu.add(meal);
         }
@@ -71,17 +69,19 @@ public class RestaurantOwnerService {
 
     public Restaurant getRestaurantDetails(int id) {
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r WHERE r.id =:id",
-            Restaurant.class);
+                Restaurant.class);
         query.setParameter("id", id);
         Restaurant restaurant = query.getSingleResult();
         return restaurant;
     }
 
-    public RestaurantReport getRestaurantReport(int id){
+    public RestaurantReport getRestaurantReport(int id) {
         TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r Join r.menu m WHERE r.id =:id",
-            Restaurant.class);
+                Restaurant.class);
         query.setParameter("id", id);
         List<Restaurant> restaurants = query.getResultList();
         return new RestaurantReport(restaurants.get(0));
     }
 }
+// TODO
+// cancel order, restaurant report, and mark order

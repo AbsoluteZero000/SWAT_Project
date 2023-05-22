@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import app.Models.*;
-import app.Util.OrderDetails;
 import app.Util.Communication_Classes.RunnerComm;
 import app.Util.Enums.OrderStatus;
 import app.Util.Enums.Status;
@@ -46,7 +45,9 @@ public class RunnerService {
     }
 
     public int getNumberOfTrips(int id) {
-        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED", Orders.class);
+        TypedQuery<Orders> query = em.createQuery(
+                "SELECT o FROM Orders o WHERE o.runner.id =?1 and o.orderStatus = app.Util.Enums.OrderStatus.DELIVERED",
+                Orders.class);
         query.setParameter(1, id);
         List<Orders> list = query.getResultList();
         return list.size();
