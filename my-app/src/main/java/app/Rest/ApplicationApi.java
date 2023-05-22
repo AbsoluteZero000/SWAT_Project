@@ -47,15 +47,17 @@ public class ApplicationApi {
     @Inject
     private HttpServletRequest request;
 
+    private User currentUser;
+
     @PostConstruct
     public void setUser(){
-        try{Principal principal = request.getUserPrincipal();
-        String login = principal.getName();
-        User user = userService.findUserByName(login);
-        System.out.println(user);
-        if(user == null){
-            user = new User(login);
-            userService.addUser(user);
+        try{
+            Principal principal = request.getUserPrincipal();
+            String login = principal.getName();
+            currentUser = userService.findUserByName(login);
+            if(currentUser == null){
+                currentUser = new User(login);
+                userService.addUser(currentUser);
         }}
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -84,8 +86,8 @@ public class ApplicationApi {
     @PermitAll
     @POST
     @Path("signup")
-    public void signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
-        userService.signup(loginWrapper);
+    public User signup(LoginWrapper loginWrapper) throws UserAlreadyExistException, IOException{
+        return userService.signup(loginWrapper);
     }
 
     @POST
