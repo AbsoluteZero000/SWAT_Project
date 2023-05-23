@@ -1,0 +1,387 @@
+{
+	"info": {
+		"_postman_id": "31987623-03e2-4974-b233-1fe9fd6522cd",
+		"name": "Test LE ASSIGNMENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25073435",
+		"_collection_link": "https://solar-desert-491279.postman.co/workspace/New-Team-Workspace~67b49183-4fe8-41d8-ab01-e1a1f1c5c5fa/collection/25073435-31987623-03e2-4974-b233-1fe9fd6522cd?action=share&creator=25073435&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "addRunner",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"loginWrapper\":{\r\n        \"name\":\"ahmed\",\r\n        \"password\": \"password\",\r\n        \"role\":\"CUSTOMER\"\r\n        },\r\n    \"deliveryFees\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/addRunner"
+			},
+			"response": []
+		},
+		{
+			"name": "getNumberOfTrips",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/SWAT_Project-1.0/api/getNumberOfTrips?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"SWAT_Project-1.0",
+						"api",
+						"getNumberOfTrips"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createResturant",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"owner\":{\r\n        \"name\":\"Ahmed\"\r\n    },\r\n    \r\n    \"name\":\"Cinnabon\",\r\n\r\n    \"menu\":[\r\n        {\r\n        \"name\": \"koshary\",\r\n            \"price\": 50\r\n        }, \r\n        {\r\n        \"name\": \"rozbelabn\",\r\n            \"price\": 40\r\n        }, \r\n        {\r\n        \"name\": \"rice\",\r\n        \"price\": 450\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/createRestaurant"
+			},
+			"response": []
+		},
+		{
+			"name": "getRestaurantDetails",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/SWAT_Project-1.0/api/getRestaurantDetails?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"SWAT_Project-1.0",
+						"api",
+						"getRestaurantDetails"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllRestaurants",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/getAllRestaurants"
+			},
+			"response": []
+		},
+		{
+			"name": "getRestaurantReport",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/getRestaurantReport"
+			},
+			"response": []
+		},
+		{
+			"name": "createMenu",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"menu\":[\r\n                {\r\n                \"name\": \"3ff\",\r\n                    \"price\": 505\r\n                }, \r\n                {\r\n                \"name\": \"rozbelabn\",\r\n                    \"price\": 40\r\n                }, \r\n                {\r\n                \"name\": \"rice\",\r\n                \"price\": 450\r\n                }\r\n            ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/editMenu"
+			},
+			"response": []
+		},
+		{
+			"name": "createOrder",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":[1,2,3]\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/createOrder"
+			},
+			"response": []
+		},
+		{
+			"name": "editOrder",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ids\":[2]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/editOrder"
+			},
+			"response": []
+		},
+		{
+			"name": "markOrder",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/SWAT_Project-1.0/api/markOrder?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"SWAT_Project-1.0",
+						"api",
+						"markOrder"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cancelOrder",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/cancelOrder"
+			},
+			"response": []
+		},
+		{
+			"name": "getOrder",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/getOrder"
+			},
+			"response": []
+		},
+		{
+			"name": "get menu",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/1/getMenu"
+			},
+			"response": []
+		},
+		{
+			"name": "signUp",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "Guest",
+						"username": "Guest"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Guest\",\r\n    \"password\": \"Guest\",\r\n    \"role\":\"RUNNER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"ahmed\",\r\n    \"password\": \"Guest\",\r\n    \"role\":\"RUNNER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/SWAT_Project-1.0/api/login"
+			},
+			"response": []
+		}
+	]
+}
